@@ -58,7 +58,7 @@
 #define MONEY_SUPPLY                                    ((uint64_t)100000000000000000) // 100 million.
 #define EMISSION_SPEED_FACTOR                           21
 #define FINAL_SUBSIDY                                   ((uint64_t)10000000000) // 1 * pow(10, 9)
-#define GENESIS_BLOCK_REWARD                            ((uint64_t)0)
+#define GENESIS_BLOCK_REWARD                            ((uint64_t)1000000000)
 
 #define CRYPTONOTE_PROJECT_BLOCK_REWARD                 0.02 // Percentage of the total block reward.
 // Initial dev fee - drops down rapidly and averages to CRYPTONOTE_PROJECT_BLOCK_REWARD over time
@@ -157,15 +157,15 @@ namespace config
   std::string const P2P_REMOTE_DEBUG_TRUSTED_PUB_KEY = "";
 
   uint64_t const CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 0x1a9a;            // So
-  uint64_t const CRYPTONOTE_PUBLIC_INTEGRATED_ADDRESS_BASE58_PREFIX = 0xe9f54; // casi
-  uint64_t const CRYPTONOTE_PUBLIC_SUBADDRESS_BASE58_PREFIX = 0x1b19a;         // Suba
+  uint64_t const CRYPTONOTE_PUBLIC_INTEGRATED_ADDRESS_BASE58_PREFIX = 0x6599; // Si
+  uint64_t const CRYPTONOTE_PUBLIC_SUBADDRESS_BASE58_PREFIX = 0x7c18;         // Sa
   uint16_t const P2P_DEFAULT_PORT = 19798;
   uint16_t const RPC_DEFAULT_PORT = 19799;
 
   boost::uuids::uuid const NETWORK_ID = { {
       0x04, 0x0c, 0xcf, 0xce, 0xcc, 0x7c, 0x27, 0x4a, 0xcc, 0xd4, 0xc3, 0xcd, 0x41, 0x42, 0x43, 0x41
     } }; // Bender's nightmare
-  std::string const GENESIS_TX = "013c01ff0001ec85afd1b101029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd088071210169603c791d06fbe5b7d88b67f38d878d7f9dadc050cdf118114061d757738f0d";
+  std::string const GENESIS_TX = "013c01ff00018094ebdc0302e7f782f50022606019f413dd626ee54d9ea4fcbcf9fa435f3eea62d28993355d2101da84878931750cc5f422a1cad96f8e7e66568cbdac9da211832f42198cb71e10";
   uint32_t const GENESIS_NONCE = 10000;
 
   namespace testnet
@@ -179,7 +179,7 @@ namespace config
     boost::uuids::uuid const NETWORK_ID = { {
         0xc2, 0x0c, 0x06, 0xdf, 0xce, 0xfc, 0x7c, 0x27, 0xcc, 0x2c, 0xc2, 0xf2, 0xc1, 0x44, 0x44, 0x43
       } }; // Bender's daydream
-    std::string const GENESIS_TX = "013c01ff0001ec85afd1b101029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd088071210169603c791d06fbe5b7d88b67f38d878d7f9dadc050cdf118114061d757738f0d";
+    std::string const GENESIS_TX = "013c01ff00018094ebdc0302e7f782f50022606019f413dd626ee54d9ea4fcbcf9fa435f3eea62d28993355d2101da84878931750cc5f422a1cad96f8e7e66568cbdac9da211832f42198cb71e10";
     uint32_t const GENESIS_NONCE = 10001;
   }
 }
