@@ -84,9 +84,7 @@ static const struct {
   uint8_t threshold;
   time_t time;
 } mainnet_hard_forks[] = {
-  { 1, 1, 0, 1482806500 },
-  { 2, 21300, 0, 1497657600 },
-  { 3, 51200, 0, 1523130006 } // Between 10th and 14th of April.
+  { 1, 1, 0, 1482806500 }
 };
 static const uint64_t mainnet_hard_fork_version_1_till = (uint64_t)-1;
 
@@ -96,9 +94,7 @@ static const struct {
   uint8_t threshold;
   time_t time;
 } testnet_hard_forks[] = {
-  { 1, 1, 0, 1482806500 },
-  { 2, 30, 0, 1497181713 },
-  { 3, 125, 0, 1522597016 }
+  { 1, 1, 0, 1482806500 }
 };
 static const uint64_t testnet_hard_fork_version_1_till = (uint64_t)-1;
 
