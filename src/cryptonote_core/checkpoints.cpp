@@ -159,7 +159,7 @@ namespace cryptonote
 
   bool checkpoints::init_default_checkpoints()
   {
-    ADD_CHECKPOINT(1,   "33195a99d57c39d1a5990ce7a254696e8e3a85b2f8e072f4fc734c84681143e3"); // TO BE DONE ON FIRST BLOCK!!!
+    // ADD_CHECKPOINT(1,   "33195a99d57c39d1a5990ce7a254696e8e3a85b2f8e072f4fc734c84681143e3"); // TO BE DONE ON FIRST BLOCK!!!
 
     return true;
   }
@@ -201,9 +201,9 @@ namespace cryptonote
     // All SolacePulse domains have DNSSEC on and valid
     static const std::vector<std::string> dns_urls =
     {
-      "checkpoints1.cryptonote.rocks",
-      "checkpoints2.cryptonote.rocks",
-      "checkpoints3.cryptonote.rocks"
+      "checkpoints1.solace-coin.com",
+      "checkpoints2.solace-coin.com",
+      "checkpoints3.solace-coin.com"
     };
 
     static const std::vector<std::string> testnet_dns_urls = {
