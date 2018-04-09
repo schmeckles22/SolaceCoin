@@ -29,7 +29,7 @@ The development fee will be used to pay for development, exchanges and marketing
 ## Coin Supply & Emission
 
 - **Total supply**: **1,000,000,000** coins in first 20 years which is followed by a tail emission each year for inflation.
-- **Coin symbol**: **OMB**
+- **Coin symbol**: **SOL**
 - **Coin Units**:
   + 1 Nano-Solace &nbsp;= 0.000000001 **SOL** (10<sup>-9</sup> - _the smallest coin unit_)
   + 1 Micro-Solace = 0.000001 **SOL** (10<sup>-6</sup>)
