@@ -159,7 +159,7 @@ namespace cryptonote
 
   bool checkpoints::init_default_checkpoints()
   {
-    ADD_CHECKPOINT(1,   "70993660d8935714ccc7f5ffbb2a270954b38033e1288e72846a8ac23c674d3b"); // TO BE DONE ON FIRST BLOCK!!!
+    // ADD_CHECKPOINT(1,   "70993660d8935714ccc7f5ffbb2a270954b38033e1288e72846a8ac23c674d3b"); // TO BE DONE ON FIRST BLOCK!!!
 
     return true;
   }
