@@ -55,10 +55,10 @@
 #define BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW_V2            12
 
 // MONEY_SUPPLY - total number coins to be generated
-#define MONEY_SUPPLY                                    ((uint64_t)1000000000000000000) // 1 billion.
+#define MONEY_SUPPLY                                    ((uint64_t)100000000000000000) // 100 million.
 #define EMISSION_SPEED_FACTOR                           21
 #define FINAL_SUBSIDY                                   ((uint64_t)10000000000) // 1 * pow(10, 9)
-#define GENESIS_BLOCK_REWARD                            ((uint64_t)1000000000)
+#define GENESIS_BLOCK_REWARD                            ((uint64_t)0)
 
 #define CRYPTONOTE_PROJECT_BLOCK_REWARD                 0.02 // Percentage of the total block reward.
 // Initial dev fee - drops down rapidly and averages to CRYPTONOTE_PROJECT_BLOCK_REWARD over time
@@ -159,8 +159,8 @@ namespace config
   uint64_t const CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 0x1a9a;            // So
   uint64_t const CRYPTONOTE_PUBLIC_INTEGRATED_ADDRESS_BASE58_PREFIX = 0xe9f54; // casi
   uint64_t const CRYPTONOTE_PUBLIC_SUBADDRESS_BASE58_PREFIX = 0x1b19a;         // Suba
-  uint16_t const P2P_DEFAULT_PORT = 19743;
-  uint16_t const RPC_DEFAULT_PORT = 19744;
+  uint16_t const P2P_DEFAULT_PORT = 19798;
+  uint16_t const RPC_DEFAULT_PORT = 19799;
 
   boost::uuids::uuid const NETWORK_ID = { {
       0x04, 0x06, 0xdf, 0xce, 0xfc, 0x7c, 0x27, 0x4a, 0x24, 0xd4, 0xf3, 0x8d, 0x41, 0x42, 0x43, 0x41
