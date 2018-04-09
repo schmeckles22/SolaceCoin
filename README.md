@@ -38,6 +38,13 @@ The development fee will be used to pay for development, exchanges and marketing
 - **Emission scheme**: Solace's block reward changes _every 6-months_ as the following "Camel" distribution* (inspired by _real-world mining production_ like of crude oil, coal etc. that is often slow at first,
 accelerated in the next few years before declined and depleted). This great emission scheme was first introduced in Sumokoin.
 
+## Versions
+
+| Fork Date              | Consensus version | Minimum Superior Version | Recommended Superior Version | Name/Details            |  
+| ----------------- | ----------------- | ---------------------- | -------------------------- | ------------------ |
+| 2017-01-07        | v1        | v0.1.0                 | v0.1.0                    | "Colossus of Rhodes" / First version  |
+
+
 ## Roadmap 2018
 
 
