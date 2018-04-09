@@ -37,14 +37,14 @@ RUN apt-get update && \
 COPY --from=builder /src/build/release/bin/* /usr/local/bin/
 
 # Contains the blockchain
-VOLUME /root/.solre
+VOLUME /root/.solace
 
 # Generate your wallet via accessing the container and run:
 # cd /wallet
-# solre-wallet-cli
+# solace-wallet-cli
 VOLUME /wallet
 
 EXPOSE 19743
 EXPOSE 19744
 
-ENTRYPOINT ["solred", "--p2p-bind-ip=0.0.0.0", "--p2p-bind-port=19743", "--rpc-bind-ip=0.0.0.0", "--rpc-bind-port=19744", "--non-interactive"]
+ENTRYPOINT ["solaced", "--p2p-bind-ip=0.0.0.0", "--p2p-bind-port=19743", "--rpc-bind-ip=0.0.0.0", "--rpc-bind-port=19744", "--non-interactive"]
