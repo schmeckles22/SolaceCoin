@@ -134,9 +134,9 @@
 #define THREAD_STACK_SIZE                               5 * 1024 * 1024
 
 // coin emission change interval/speed configs
-#define COIN_EMISSION_MONTH_INTERVAL                    6  // months to change emission speed
+#define COIN_EMISSION_MONTH_INTERVAL                    2  // months to change emission speed
 #define COIN_EMISSION_HEIGHT_INTERVAL                   ((uint64_t) (COIN_EMISSION_MONTH_INTERVAL * (30.4375 * 24 * 3600) / DIFFICULTY_TARGET)) // calculated to # of heights to change emission speed
-#define PEAK_COIN_EMISSION_YEAR                         4
+#define PEAK_COIN_EMISSION_YEAR                         2
 #define PEAK_COIN_EMISSION_HEIGHT                       ((uint64_t) (((12 * 30.4375 * 24 * 3600)/DIFFICULTY_TARGET) * PEAK_COIN_EMISSION_YEAR)) // = (# of heights emmitted per year) * PEAK_COIN_EMISSION_YEAR
 
 #define DEFAULT_MIXIN                                   10     // default & minimum mixin allowed
