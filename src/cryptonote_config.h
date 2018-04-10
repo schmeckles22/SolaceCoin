@@ -57,8 +57,8 @@
 // MONEY_SUPPLY - total number coins to be generated
 #define MONEY_SUPPLY                                    ((uint64_t)210000000000000000) // 21 Billion.
 #define EMISSION_SPEED_FACTOR                           19
-#define FINAL_SUBSIDY                                   ((uint64_t)100000000) // 1 * pow(8, 7)
-#define GENESIS_BLOCK_REWARD                            ((uint64_t)100000000)
+#define FINAL_SUBSIDY                                   ((uint64_t)10000000) // 1 * pow(8, 7)
+#define GENESIS_BLOCK_REWARD                            ((uint64_t)10000000)
 
 #define CRYPTONOTE_PROJECT_BLOCK_REWARD                 0.02 // Percentage of the total block reward.
 // Initial dev fee - drops down rapidly and averages to CRYPTONOTE_PROJECT_BLOCK_REWARD over time
