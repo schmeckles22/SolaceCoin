@@ -465,7 +465,7 @@ namespace nodetool
         if (result.size())
         {
           for (const auto& addr_string : result)
-            full_addrs.insert(addr_string + ":19743");
+            full_addrs.insert(addr_string + ":19798");
         }
         ++i;
       }
