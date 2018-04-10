@@ -55,8 +55,8 @@
 #define BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW_V2            12
 
 // MONEY_SUPPLY - total number coins to be generated
-#define MONEY_SUPPLY                                    ((uint64_t)100000000000000000) // 100 million.
-#define EMISSION_SPEED_FACTOR                           21
+#define MONEY_SUPPLY                                    ((uint64_t)21000000000000000000) // 21 Billion.
+#define EMISSION_SPEED_FACTOR                           19
 #define FINAL_SUBSIDY                                   ((uint64_t)10000000000) // 1 * pow(10, 9)
 #define GENESIS_BLOCK_REWARD                            ((uint64_t)1000000000)
 
