@@ -1,4 +1,5 @@
 // Copyright (c) 2014-2017, The Monero Project
+// Copyright (c) 2014-2017, The Monero Project
 // Copyright (c) 2017, SUMOKOIN
 //
 // All rights reserved.
@@ -1589,7 +1590,7 @@ void simple_wallet::on_money_received(uint64_t height, const crypto::hash &txid,
   message_writer(epee::log_space::console_color_green, false) << "\r" <<
     tr("Height ") << height << ", " <<
     tr("txid ") << txid << ", " <<
-    print_money(amount) << tr(" OMB, ") <<
+    print_money(amount) << tr(" SOLACE, ") <<
     tr("idx ") << subaddr_index;
   if (m_auto_refresh_refreshing)
     m_cmd_binder.print_prompt();
@@ -1724,7 +1725,7 @@ bool simple_wallet::show_balance_unlocked(bool detailed)
   for (const auto& i : balance_per_subaddress)
   {
     cryptonote::subaddress_index subaddr_index = { m_current_subaddress_account, i.first };
-    std::string address_str = m_wallet->get_subaddress_as_str(subaddr_index).substr(0, 9);
+    std::string address_str = m_wallet->get_subaddress_as_str(subaddr_index).substr(0, 7);
     uint64_t num_unspent_outputs = std::count_if(transfers.begin(), transfers.end(), [&subaddr_index](const tools::wallet2::transfer_details& td) { return !td.m_spent && td.m_subaddr_index == subaddr_index; });
     success_msg_writer() << boost::format(tr("%8u %9s %21s %21s %8u %21s")) % i.first % address_str % print_money(i.second) % print_money(unlocked_balance_per_subaddress[i.first]) % num_unspent_outputs % m_wallet->get_subaddress_label(subaddr_index).substr(0, 21);
   }
@@ -3394,7 +3395,7 @@ bool simple_wallet::run()
   m_auto_refresh_enabled = m_wallet->auto_refresh();
   m_idle_thread = boost::thread([&]{wallet_idle_thread();});
 
-  std::string addr_start = m_wallet->get_subaddress_as_str({ m_current_subaddress_account, 0 }).substr(0, 9);
+  std::string addr_start = m_wallet->get_subaddress_as_str({ m_current_subaddress_account, 0 }).substr(0, 7);
   message_writer(epee::log_space::console_color_green, false) << "Background refresh thread started";
   std::ostringstream prompt;
   prompt << "[" << tr("wallet/") << m_current_subaddress_account << " " << addr_start << "]: ";
@@ -3493,7 +3494,7 @@ bool simple_wallet::account(const std::vector<std::string> &args/* = std::vector
 void simple_wallet::update_prompt()
 {
   std::ostringstream prompt;
-  prompt << "[" << tr("wallet/") << m_current_subaddress_account << " " << m_wallet->get_subaddress_as_str({ m_current_subaddress_account, 0 }).substr(0, 9) << "]: ";
+  prompt << "[" << tr("wallet/") << m_current_subaddress_account << " " << m_wallet->get_subaddress_as_str({ m_current_subaddress_account, 0 }).substr(0, 7) << "]: ";
   m_cmd_binder.set_prompt(prompt.str());
 }
 //----------------------------------------------------------------------------------------------------
@@ -3504,7 +3505,7 @@ void simple_wallet::print_accounts()
   {
     success_msg_writer() << boost::format(tr("%8u %9s %21s %21s %21s"))
       % account_index
-      % m_wallet->get_subaddress_as_str({ account_index, 0 }).substr(0, 9)
+      % m_wallet->get_subaddress_as_str({ account_index, 0 }).substr(0, 7)
       % print_money(m_wallet->balance(account_index))
       % print_money(m_wallet->unlocked_balance(account_index))
       % m_wallet->get_subaddress_label({ account_index, 0 }).substr(0, 21);

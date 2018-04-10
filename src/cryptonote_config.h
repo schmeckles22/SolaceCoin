@@ -56,7 +56,7 @@
 
 // MONEY_SUPPLY - total number coins to be generated
 #define MONEY_SUPPLY                                    ((uint64_t)210000000000000000) // 21 Billion.
-#define EMISSION_SPEED_FACTOR                           19
+#define EMISSION_SPEED_FACTOR                           20
 #define FINAL_SUBSIDY                                   ((uint64_t)10000000) // 1 * pow(8, 7)
 #define GENESIS_BLOCK_REWARD                            ((uint64_t)10000000)
 
@@ -76,7 +76,7 @@
 
 #define FEE_PER_KB                                      ((uint64_t)5000)
 #define DYNAMIC_FEE_PER_KB_BASE_FEE                     ((uint64_t)5000) // 0.0005 * pow(10, 9)
-#define DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD            ((uint64_t)640000000) // 64 * pow(10, 9)
+#define DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD            ((uint64_t)6400000) // 64 * pow(10, 9)
 
 #define ORPHANED_BLOCKS_MAX_COUNT                       100
 
