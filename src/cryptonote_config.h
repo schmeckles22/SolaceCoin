@@ -55,10 +55,10 @@
 #define BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW_V2            12
 
 // MONEY_SUPPLY - total number coins to be generated
-#define MONEY_SUPPLY                                    ((uint64_t)21000000000000000000) // 21 Billion.
+#define MONEY_SUPPLY                                    ((uint64_t)210000000000000000) // 21 Billion.
 #define EMISSION_SPEED_FACTOR                           19
-#define FINAL_SUBSIDY                                   ((uint64_t)10000000000) // 1 * pow(10, 9)
-#define GENESIS_BLOCK_REWARD                            ((uint64_t)1000000000)
+#define FINAL_SUBSIDY                                   ((uint64_t)100000000) // 1 * pow(8, 7)
+#define GENESIS_BLOCK_REWARD                            ((uint64_t)100000000)
 
 #define CRYPTONOTE_PROJECT_BLOCK_REWARD                 0.02 // Percentage of the total block reward.
 // Initial dev fee - drops down rapidly and averages to CRYPTONOTE_PROJECT_BLOCK_REWARD over time
@@ -72,11 +72,11 @@
 #define CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE          600
 #define CRYPTONOTE_DISPLAY_DECIMAL_POINT                9
 // COIN - number of smallest units in one coin
-#define COIN                                            ((uint64_t)1000000000) // pow(10, 9)
+#define COIN                                            ((uint64_t)10000000) // pow(10, 9)
 
-#define FEE_PER_KB                                      ((uint64_t)500000)
-#define DYNAMIC_FEE_PER_KB_BASE_FEE                     ((uint64_t)500000) // 0.0005 * pow(10, 9)
-#define DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD            ((uint64_t)64000000000) // 64 * pow(10, 9)
+#define FEE_PER_KB                                      ((uint64_t)5000)
+#define DYNAMIC_FEE_PER_KB_BASE_FEE                     ((uint64_t)5000) // 0.0005 * pow(10, 9)
+#define DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD            ((uint64_t)640000000) // 64 * pow(10, 9)
 
 #define ORPHANED_BLOCKS_MAX_COUNT                       100
 
