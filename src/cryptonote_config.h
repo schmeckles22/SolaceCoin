@@ -76,7 +76,7 @@
 
 #define FEE_PER_KB                                      ((uint64_t)5000)
 #define DYNAMIC_FEE_PER_KB_BASE_FEE                     ((uint64_t)5000) // 0.0005 * pow(10, 9)
-#define DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD            ((uint64_t)6400000) // 64 * pow(10, 9)
+#define DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD            ((uint64_t)5000000) // 64 * pow(10, 9)
 
 #define ORPHANED_BLOCKS_MAX_COUNT                       100
 
