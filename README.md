@@ -45,7 +45,7 @@ accelerated in the next few years before declined and depleted). This great emis
 | 2017-01-07        | v1        | v0.1.0                 | v0.1.0                    | "Colossus of Rhodes" / First version  |
 
 
-## Roadmap 2019
+## Roadmap 2018
 Quarter 2
 -Launch SolanceCoin - Completed
 -Completion of the SolaceCoin Website
