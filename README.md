@@ -47,19 +47,19 @@ accelerated in the next few years before declined and depleted). This great emis
 
 ## Roadmap 2019
 Quarter 2
-Launch SolanceCoin - Completed
-Completion of the SolaceCoin Website
-GUI Wallet
-Web Wallet
-Exchange listing
-Charity voting website completion
+-Launch SolanceCoin - Completed
+-Completion of the SolaceCoin Website
+-GUI Wallet
+-Web Wallet
+-Exchange listing
+-Charity voting website completion
 
 Quarter 3
-Mobile Wallets
-Medical Crowdfunding by Solace
-Add more developers to the team
-More Exchange listings
-Mine for your charity script
+-Mobile Wallets
+-Medical Crowdfunding by Solace
+-Add more developers to the team
+-More Exchange listings
+-Mine for your charity script
 
 
 
