@@ -2,7 +2,7 @@
 
 ## Development Resources
 
-- Web: [www.comingsoon.com](https://www.comingsoon.com)
+- Web: [www.solace-coin.com](http://solace-coin.com)
 - GitHub: [https://github.com/schmeckles22/SolaceCoin](https://github.com/schmeckles22/SolaceCoin)
 
 ## Introduction
