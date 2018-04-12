@@ -2,7 +2,7 @@
 
 ## Development Resources
 
-- Web: [www.comingsoon.com](https://www.comingsoon.com)
+- Web: [www.solace-coin.com](http://solace-coin.com)
 - GitHub: [https://github.com/schmeckles22/SolaceCoin](https://github.com/schmeckles22/SolaceCoin)
 
 ## Introduction
@@ -46,11 +46,34 @@ accelerated in the next few years before declined and depleted). This great emis
 
 
 ## Roadmap 2018
+Quarter 2
+-Launch SolanceCoin - Completed
+-Completion of the SolaceCoin Website
+-GUI Wallet
+-Web Wallet
+-Exchange listing
+-Charity voting website completion
+
+Quarter 3
+-Mobile Wallets
+-Medical Crowdfunding by Solace
+-Add more developers to the team
+-More Exchange listings
+-Mine for your charity script
+
+
 
 
 
 ## About this Project
 
+SolaceCoin is a cryptocurrency with a difference and does exactly what the name says.
+Definition of Solace “comfort or consolation in a time of great distress or sadness.”
+
+SolaceCoin has two functions
+
+1) Helping charities to help others in need of medical attention but cannot afford it – Please read below.
+2) Serving as a currency for daily usage
 
 
 ## License
