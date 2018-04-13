@@ -3622,10 +3622,7 @@ bool Blockchain::prepare_handle_incoming_blocks(const std::list<block_complete_e
         thread_list.push_back(new boost::thread(&Blockchain::block_longhash_worker, this, std::ref(m_hash_ctxes_multi[i]), std::cref(blocks[i]), std::ref(maps[i])));
        }
  
-       for (size_t j = 0; j < thread_list.size(); j++)
-
-      }
-
+       
       for (size_t j = 0; j < thread_list.size(); j++)
       {
         thread_list[j]->join();
