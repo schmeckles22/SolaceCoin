@@ -96,8 +96,8 @@ static const struct {
   time_t time;
 } testnet_hard_forks[] = {
   { 1, 1, 0, 1482806500 },
-  { 2, 6, 0, 1524272502 },
-  { 2, 7, 0, 1524272502 }
+  { 2, 50, 0, 1524272502 },
+  { 2, 100, 0, 1529272502 }
 };
 static const uint64_t testnet_hard_fork_version_1_till = (uint64_t)-1;
 
