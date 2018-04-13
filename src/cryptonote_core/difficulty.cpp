@@ -185,6 +185,11 @@ namespace cryptonote {
     if (high != 0) {
       return 0;
     }
+
+    if (!low / weighted_timespans) {
+      return 1;
+    }
+
     return low / weighted_timespans;
   }
 

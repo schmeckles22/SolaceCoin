@@ -28,21 +28,23 @@ The development fee will be used to pay for development, exchanges and marketing
 
 ## Coin Supply & Emission
 
-- **Total supply**: **1,000,000,000** coins in first 20 years which is followed by a tail emission each year for inflation.
-- **Coin symbol**: **SOL**
+- **Total supply**: **21,000,000,000** coins in first 20 years which is followed by a tail emission each year for inflation.
+- **Coin symbol**: **SOLACE**
 - **Coin Units**:
-  + 1 Nano-Solace &nbsp;= 0.000000001 **SOL** (10<sup>-9</sup> - _the smallest coin unit_)
-  + 1 Micro-Solace = 0.000001 **SOL** (10<sup>-6</sup>)
-  + 1 Milli-Solace = 0.001 **SOL** (10<sup>-3</sup>)
+  + 1 Nano-Solace &nbsp;= 0.0000001 **SOLACE** (10<sup>-7</sup> - _the smallest coin unit_)
+  + 1 Micro-Solace = 0.0001 **SOLACE** (10<sup>-4</sup>)
+  + 1 Milli-Solace = 0.1 **SOLACE** (10<sup>-1</sup>)
 - **Hash algorithm**: CryptoNight (Proof-Of-Work)
 - **Emission scheme**: Solace's block reward changes _every 6-months_ as the following "Camel" distribution* (inspired by _real-world mining production_ like of crude oil, coal etc. that is often slow at first,
 accelerated in the next few years before declined and depleted). This great emission scheme was first introduced in Sumokoin.
 
 ## Versions
 
-| Fork Date              | Consensus version | Minimum Superior Version | Recommended Superior Version | Name/Details            |  
+| Fork Date              | Consensus version | Minimum Solace Version | Recommended Solace Version | Name/Details            |  
 | ----------------- | ----------------- | ---------------------- | -------------------------- | ------------------ |
-| 2017-01-07        | v1        | v0.1.0                 | v0.1.0                    | "Colossus of Rhodes" / First version  |
+| 2018-04-11        | v1        | v0.1.0                 | v0.1.0                    | "Colossus of Rhodes" / First version  |
+| 2018-04-12        | v2        | v0.1.1                 | v0.1.1                    | "Colossus of Rhodes" / Hard fork to solve transaction fees |
+| 2018-04-19        | v3        | v0.2.0                 | v0.2.0                    | "Hanging Gardens of Babylon" / ASIC Resistance - CryptoNight-Heavy |
 
 
 ## Roadmap 2018
