@@ -40,11 +40,11 @@ accelerated in the next few years before declined and depleted). This great emis
 
 ## Versions
 
-| Fork Date              | Consensus version | Minimum Superior Version | Recommended Superior Version | Name/Details            |  
+| Fork Date              | Consensus version | Minimum Solace Version | Recommended Solace Version | Name/Details            |  
 | ----------------- | ----------------- | ---------------------- | -------------------------- | ------------------ |
 | 2018-04-11        | v1        | v0.1.0                 | v0.1.0                    | "Colossus of Rhodes" / First version  |
 | 2018-04-12        | v2        | v0.1.1                 | v0.1.1                    | "Colossus of Rhodes" / Hard fork to solve transaction fees |
-| 2018-04-99        | v3        | v0.2.0                 | v0.2.0                    | "Hanging Gardens of Babylon" / ASIC Resistance - CryptoNight-Heavy |
+| 2018-04-19        | v3        | v0.2.0                 | v0.2.0                    | "Hanging Gardens of Babylon" / ASIC Resistance - CryptoNight-Heavy |
 
 
 ## Roadmap 2018
