@@ -1423,8 +1423,8 @@ bool Blockchain::handle_alternative_block(const block& b, const crypto::hash& id
       else bvc.m_verifivation_failed = true;
 
       return r;
-    }
-    else if(main_chain_cumulative_difficulty < bei.cumulative_difficulty) //check if difficulty bigger then in main chain
+    
+    } else if(main_chain_cumulative_difficulty < bei.cumulative_difficulty) //check if difficulty bigger then in main chain
     {
       //do reorganize!
       LOG_PRINT_GREEN("###### REORGANIZE on height: " << alt_chain.front()->second.height << " of " << m_db->height() - 1 << " with cum_difficulty " << m_db->get_block_cumulative_difficulty(m_db->height() - 1) << std::endl << " alternative blockchain size: " << alt_chain.size() << " with cum_difficulty " << bei.cumulative_difficulty, LOG_LEVEL_0);
@@ -1441,9 +1441,7 @@ bool Blockchain::handle_alternative_block(const block& b, const crypto::hash& id
       LOG_PRINT_BLUE("----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT " << bei.height << std::endl << "id:\t" << id << std::endl << "PoW:\t" << proof_of_work << std::endl << "difficulty:\t" << current_diff, LOG_LEVEL_0);
       return true;
     }
-  }
-  else
-  {
+  } else {
     //block orphaned
     bvc.m_marked_as_orphaned = true;
     LOG_PRINT_RED_L1("Block recognized as orphaned and rejected, id = " << id);

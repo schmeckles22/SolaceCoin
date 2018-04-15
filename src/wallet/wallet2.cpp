@@ -990,9 +990,7 @@ void wallet2::process_new_transaction(const crypto::hash &txid, const cryptonote
             << " from received " << print_money(tx.vout[o].amount) << " output already exists with "
             << (m_transfers[kit->second].m_spent ? "spent" : "unspent") << " "
             << print_money(m_transfers[kit->second].amount()) << ", received output ignored");
-        }
-        else
-        {
+        } else {
           LOG_ERROR("Public key " << epee::string_tools::pod_to_hex(kit->first)
             << " from received " << print_money(tx.vout[o].amount) << " output already exists with "
             << print_money(m_transfers[kit->second].amount()) << ", replacing with new output");
@@ -4776,7 +4774,7 @@ uint64_t wallet2::get_upper_transaction_size_limit()
   uint64_t version = 0;
   get_hard_fork_info(version, earliest_height); // can throw
 
-  if (version == 2) {
+  if (version < 3) {
     return TRANSACTION_SIZE_LIMIT;
   }
   return TRANSACTION_SIZE_LIMIT_V2;
