@@ -121,7 +121,7 @@ namespace cryptonote
     }
 
     size_t tx_size_limit = TRANSACTION_SIZE_LIMIT_V2;
-    if (version == 2) {
+    if (version < 3) {
       tx_size_limit = TRANSACTION_SIZE_LIMIT;
     }
 
@@ -687,7 +687,7 @@ namespace cryptonote
     size_t n_removed = 0;
 
     size_t tx_size_limit = TRANSACTION_SIZE_LIMIT_V2;
-    if (version == 2) {
+    if (version < 3) {
       tx_size_limit = TRANSACTION_SIZE_LIMIT;
     }
 
