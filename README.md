@@ -64,9 +64,6 @@ Quarter 3
 -Mine for your charity script
 
 
-
-
-
 ## About this Project
 
 SolaceCoin is a cryptocurrency with a difference and does exactly what the name says.
@@ -84,3 +81,11 @@ Please view [LICENSE](LICENSE)
 
 [![License](https://img.shields.io/badge/license-BSD3-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
+## How to get started with SolaceCoin Wallet
+
+-Download and extract the latest zip file for Solace
+-Start solaced.exe . This will take approximately an hour or more to synchronize the blockchain. On successful completion, you will see a green message "SYNCHRONIZED".
+-Start solace-wallet-cli.exe to create a wallet. Please ensure to keep the wallet key and seed words in a safe location.
+-Once your wallet address is ready, you can start mining, by referring to one of the pools listed on the website. https://www.solace-coin.com/
+
+Good Luck!
