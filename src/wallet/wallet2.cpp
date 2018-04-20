@@ -1675,7 +1675,7 @@ void wallet2::fast_refresh(uint64_t stop_height, uint64_t &blocks_start_height, 
   std::list<crypto::hash> hashes;
   size_t current_index = m_blockchain.size();
 
-  while(m_run.load(std::memory_order_relaxed) && current_index < stop_height)
+  while (m_run.load(std::memory_order_relaxed) && current_index < stop_height)
   {
     pull_hashes(0, blocks_start_height, short_chain_history, hashes);
     if (hashes.size() < 3)
