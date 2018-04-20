@@ -1,5 +1,5 @@
-// Copyright (c) 2014-2017, The Monero Project
 // Copyright (c) 2017, SUMOKOIN
+// Copyright (c) 2014-2017, The Monero Project
 //
 // All rights reserved.
 //
@@ -1138,8 +1138,8 @@ bool simple_wallet::init(const boost::program_options::variables_map& vm)
   if (!m_wallet)
   {
     fail_msg_writer() << tr("wallet is null");
-   return false;
-   }
+    return false;
+  }
 
   // set --trusted-daemon if local
   try
@@ -1320,7 +1320,7 @@ bool simple_wallet::new_wallet(const boost::program_options::variables_map& vm,
     tr("Your wallet has been generated!\n"
     "To start synchronizing with the daemon, use \"refresh\" command.\n"
     "Use \"help\" command to see the list of available commands.\n"
-    "Always use \"exit\" command when closing ombre-wallet-cli to save your\n"
+    "Always use \"exit\" command when closing solace-wallet-cli to save your\n"
     "current session's state. Otherwise, you might need to synchronize \n"
     "your wallet again (your wallet keys are NOT at risk in any case).\n")
   ;
@@ -2273,14 +2273,14 @@ bool simple_wallet::transfer_main(int transfer_type, const std::vector<std::stri
     // actually commit the transactions
     if (m_wallet->watch_only())
     {
-      bool r = m_wallet->save_tx(ptx_vector, "unsigned_sumokoin_tx");
+      bool r = m_wallet->save_tx(ptx_vector, "unsigned_solace_tx");
       if (!r)
       {
         fail_msg_writer() << tr("Failed to write transaction(s) to file");
       }
       else
       {
-        success_msg_writer(true) << tr("Unsigned transaction(s) successfully written to file: ") << "unsigned_sumokoin_tx";
+        success_msg_writer(true) << tr("Unsigned transaction(s) successfully written to file: ") << "unsigned_solace_tx";
       }
     }
     else while (!ptx_vector.empty())
@@ -2606,14 +2606,14 @@ bool simple_wallet::sweep_all(const std::vector<std::string> &args_, bool retry,
     // actually commit the transactions
     if (m_wallet->watch_only())
     {
-      bool r = m_wallet->save_tx(ptx_vector, "unsigned_sumokoin_tx");
+      bool r = m_wallet->save_tx(ptx_vector, "unsigned_solace_tx");
       if (!r)
       {
         fail_msg_writer() << tr("Failed to write transaction(s) to file");
       }
       else
       {
-        success_msg_writer(true) << tr("Unsigned transaction(s) successfully written to file: ") << "unsigned_sumokoin_tx";
+        success_msg_writer(true) << tr("Unsigned transaction(s) successfully written to file: ") << "unsigned_solace_tx";
       }
     }
     else while (!ptx_vector.empty())
@@ -2825,7 +2825,7 @@ bool simple_wallet::sign_transfer(const std::vector<std::string> &args_)
   std::vector<tools::wallet2::pending_tx> ptx;
   try
   {
-    bool r = m_wallet->sign_tx("unsigned_sumokoin_tx", "signed_sumokoin_tx", ptx, [&](const tools::wallet2::unsigned_tx_set &tx){ return accept_loaded_tx(tx); });
+    bool r = m_wallet->sign_tx("unsigned_solace_tx", "signed_solace_tx", ptx, [&](const tools::wallet2::unsigned_tx_set &tx){ return accept_loaded_tx(tx); });
     if (!r)
     {
       fail_msg_writer() << tr("Failed to sign transaction");
@@ -2845,7 +2845,7 @@ bool simple_wallet::sign_transfer(const std::vector<std::string> &args_)
       txids_as_text += (", ");
     txids_as_text += epee::string_tools::pod_to_hex(get_transaction_hash(t.tx));
   }
-  success_msg_writer(true) << tr("Transaction successfully signed to file ") << "signed_sumokoin_tx" << ", txid " << txids_as_text;
+  success_msg_writer(true) << tr("Transaction successfully signed to file ") << "signed_solace_tx" << ", txid " << txids_as_text;
   return true;
 }
 //----------------------------------------------------------------------------------------------------
@@ -2857,7 +2857,7 @@ bool simple_wallet::submit_transfer(const std::vector<std::string> &args_)
   try
   {
     std::vector<tools::wallet2::pending_tx> ptx_vector;
-    bool r = m_wallet->load_tx("signed_sumokoin_tx", ptx_vector, [&](const tools::wallet2::signed_tx_set &tx){ return accept_loaded_tx(tx); });
+    bool r = m_wallet->load_tx("signed_solace_tx", ptx_vector, [&](const tools::wallet2::signed_tx_set &tx){ return accept_loaded_tx(tx); });
     if (!r)
     {
       fail_msg_writer() << tr("Failed to load transaction from file");
@@ -3452,7 +3452,7 @@ bool simple_wallet::account(const std::vector<std::string> &args/* = std::vector
       label = tr("(Untitled account)");
     m_wallet->add_subaddress_account(label);
     m_current_subaddress_account = m_wallet->get_num_subaddress_accounts() - 1;
-   // update_prompt();
+    update_prompt();
     LOCK_IDLE_SCOPE();
     print_accounts();
   }
@@ -3471,7 +3471,7 @@ bool simple_wallet::account(const std::vector<std::string> &args/* = std::vector
       return true;
     }
     m_current_subaddress_account = index_major;
-   // update_prompt();
+    update_prompt();
     show_balance();
   }
   else if (command == "label" && local_args.size() >= 1)
@@ -4153,7 +4153,7 @@ int main(int argc, char* argv[])
 
   const auto vm = wallet_args::main(
    argc, argv,
-   "ombre-wallet-cli [--wallet-file=<file>|--generate-new-wallet=<file>] [<COMMAND>]",
+   "solace-wallet-cli [--wallet-file=<file>|--generate-new-wallet=<file>] [<COMMAND>]",
     desc_params,
     positional_options
   );
@@ -4163,9 +4163,9 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  w.init(*vm);
- // if (!w.init(*vm))
-//	  return 1;
+  cryptonote::simple_wallet w;
+  if (!w.init(*vm))
+	  return 1;
 
   std::vector<std::string> command = command_line::get_arg(*vm, arg_command);
   if (!command.empty())

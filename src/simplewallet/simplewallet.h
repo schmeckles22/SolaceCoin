@@ -1,5 +1,5 @@
-// Copyright (c) 2014-2017, The Monero Project
 // Copyright (c) 2017, SUMOKOIN
+// Copyright (c) 2014-2017, The Monero Project
 // 
 // All rights reserved.
 // 
@@ -167,8 +167,8 @@ namespace cryptonote
     bool accept_loaded_tx(const std::function<size_t()> get_num_txes, const std::function<const tools::wallet2::tx_construction_data&(size_t)> &get_tx, const std::string &extra_message = std::string());
     bool accept_loaded_tx(const tools::wallet2::unsigned_tx_set &txs);
     bool accept_loaded_tx(const tools::wallet2::signed_tx_set &txs);
-	
-	std::string get_prompt() const;
+
+    std::string get_prompt() const;
     
     /*!
      * \brief Prints the seed with a nice message
