@@ -44,7 +44,7 @@ VOLUME /root/.solace
 # solace-wallet-cli
 VOLUME /wallet
 
-EXPOSE 19743
-EXPOSE 19744
+EXPOSE 19798
+EXPOSE 19799
 
-ENTRYPOINT ["solaced", "--p2p-bind-ip=0.0.0.0", "--p2p-bind-port=19743", "--rpc-bind-ip=0.0.0.0", "--rpc-bind-port=19744", "--non-interactive"]
+ENTRYPOINT ["solaced", "--p2p-bind-ip=0.0.0.0", "--p2p-bind-port=19798", "--rpc-bind-ip=0.0.0.0", "--rpc-bind-port=19799", "--non-interactive"]
