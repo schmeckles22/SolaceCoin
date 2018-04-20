@@ -51,7 +51,7 @@ accelerated in the next few years before declined and depleted). This great emis
 Quarter 2
 -Launch SolanceCoin - Completed
 -Completion of the SolaceCoin Website
--GUI Wallet
+-GUI Wallet c
 -Web Wallet
 -Exchange listing
 -Charity voting website completion
