@@ -195,8 +195,8 @@ if a == "m":
     qhasmToC("ge_sub.c", "ge_sub.h", "ge.monero._sub.c")
     qhasmToC("ge_msub.c", "ge_msub.h", "ge.monero._msub.c")
     qhasmToC("ge_p2_dbl.c", "ge_p2_dbl.h", "ge.monero._p2_dbl.c")
-    qhasmToC("ge_frsolytes.c", "d.h", "ge.monero._frsolytes.c")
-    qhasmToC("ge.monero._frsolytes.c", "sqrtm1.h", "ge.monero._frsolytes.c")
+    qhasmToC("ge_frombytes.c", "d.h", "ge.monero._frombytes.c")
+    qhasmToC("ge.monero._frombytes.c", "sqrtm1.h", "ge.monero._frombytes.c")
     qhasmToC("ge_p3_to_cached.c", "d2.h", "ge.monero._p3_to_cached.c")
 
 

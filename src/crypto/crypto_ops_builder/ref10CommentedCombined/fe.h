@@ -13,7 +13,7 @@ t[0]+2^26 t[1]+2^51 t[2]+2^77 t[3]+2^102 t[4]+...+2^230 t[9].
 Bounds on each t[i] vary depending on context.
 */
 
-#define fe_frsolytes crypto_sign_ed25519_ref10_fe_frsolytes
+#define fe_frombytes crypto_sign_ed25519_ref10_fe_frombytes
 #define fe_tobytes crypto_sign_ed25519_ref10_fe_tobytes
 #define fe_copy crypto_sign_ed25519_ref10_fe_copy
 #define fe_isnonzero crypto_sign_ed25519_ref10_fe_isnonzero
@@ -32,7 +32,7 @@ Bounds on each t[i] vary depending on context.
 #define fe_invert crypto_sign_ed25519_ref10_fe_invert
 #define fe_pow22523 crypto_sign_ed25519_ref10_fe_pow22523
 
-extern void fe_frsolytes(fe,const unsigned char *);
+extern void fe_frombytes(fe,const unsigned char *);
 extern void fe_tobytes(unsigned char *,const fe);
 
 extern void fe_copy(fe,const fe);

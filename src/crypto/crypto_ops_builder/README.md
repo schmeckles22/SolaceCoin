@@ -10,7 +10,7 @@ SUPERCOP ref10 is a fairly secure implementation that focuses on things like con
 
 ## Additional Cryptography
 
-Unfortunately SUPERCOP ref10 does not contain every function Monero's ```crypto-ops``` class needs. Thus there are several new files in the ```ref10CommentedCsolined``` folder which allow for the class to be built during compilation. The original ref10 is included in the source tree in order to allow for a comparison to be made between the two, and also to allow for a quick comparison to be made between our in-source copy of SUPERCOP ref10 and an independently downloaded copy.
+Unfortunately SUPERCOP ref10 does not contain every function Monero's ```crypto-ops``` class needs. Thus there are several new files in the ```ref10CommentedCombined``` folder which allow for the class to be built during compilation. The original ref10 is included in the source tree in order to allow for a comparison to be made between the two, and also to allow for a quick comparison to be made between our in-source copy of SUPERCOP ref10 and an independently downloaded copy.
 
 ## Usage
 

@@ -8,7 +8,7 @@
 
 static int ed25519_random_fd = -1;
 
-static inline void ed25519_randsolytes(unsigned char *x,unsigned long long xlen)
+static inline void ed25519_randombytes(unsigned char *x,unsigned long long xlen)
 {
   int i;
 
@@ -38,7 +38,7 @@ static inline void ed25519_randsolytes(unsigned char *x,unsigned long long xlen)
 #include <windows.h>
 #include <wincrypt.h>
 
-static inline void ed25519_randsolytes(unsigned char *x,unsigned long long xlen)
+static inline void ed25519_randombytes(unsigned char *x,unsigned long long xlen)
 {
   HCRYPTPROV prov = 0;
 

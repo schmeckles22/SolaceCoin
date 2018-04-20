@@ -47,9 +47,9 @@ SODIUM_EXPORT = \
 	sodium/crypto_verify_32.h \
 	sodium/crypto_verify_64.h \
 	sodium/export.h \
-	sodium/randsolytes.h \
-	sodium/randsolytes_salsa20_random.h \
-	sodium/randsolytes_sysrandom.h \
+	sodium/randombytes.h \
+	sodium/randombytes_salsa20_random.h \
+	sodium/randombytes_sysrandom.h \
 	sodium/runtime.h \
 	sodium/utils.h
 

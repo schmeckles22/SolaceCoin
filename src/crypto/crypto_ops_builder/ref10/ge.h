@@ -50,7 +50,7 @@ typedef struct {
   fe T2d;
 } ge_cached;
 
-#define ge_frsolytes_negate_vartime crypto_sign_ed25519_ref10_ge_frsolytes_negate_vartime
+#define ge_frombytes_negate_vartime crypto_sign_ed25519_ref10_ge_frombytes_negate_vartime
 #define ge_tobytes crypto_sign_ed25519_ref10_ge_tobytes
 #define ge_p3_tobytes crypto_sign_ed25519_ref10_ge_p3_tobytes
 
@@ -73,7 +73,7 @@ typedef struct {
 
 extern void ge_tobytes(unsigned char *,const ge_p2 *);
 extern void ge_p3_tobytes(unsigned char *,const ge_p3 *);
-extern int ge_frsolytes_negate_vartime(ge_p3 *,const unsigned char *);
+extern int ge_frombytes_negate_vartime(ge_p3 *,const unsigned char *);
 
 extern void ge_p2_0(ge_p2 *);
 extern void ge_p3_0(ge_p3 *);

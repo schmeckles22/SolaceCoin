@@ -21,7 +21,7 @@ int crypto_sign_open(
 
   if (smlen < 64) goto badsig;
   if (sm[63] & 224) goto badsig;
-  if (ge_frsolytes_negate_vartime(&A,pk) != 0) goto badsig;
+  if (ge_frombytes_negate_vartime(&A,pk) != 0) goto badsig;
 
   memmove(pkcopy,pk,32);
   memmove(rcopy,sm,32);
