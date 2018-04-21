@@ -8,7 +8,7 @@ static const fe sqrtm1 = {
 #include "sqrtm1.h"
 } ;
 
-int ge_frsolytes_negate_vartime(ge_p3 *h,const unsigned char *s)
+int ge_frombytes_negate_vartime(ge_p3 *h,const unsigned char *s)
 {
   fe u;
   fe v;
@@ -16,7 +16,7 @@ int ge_frsolytes_negate_vartime(ge_p3 *h,const unsigned char *s)
   fe vxx;
   fe check;
 
-  fe_frsolytes(h->Y,s);
+  fe_frombytes(h->Y,s);
   fe_1(h->Z);
   fe_sq(u,h->Y);
   fe_mul(v,u,d);

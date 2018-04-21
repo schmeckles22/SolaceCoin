@@ -1002,7 +1002,7 @@ namespace cryptonote
   //-----------------------------------------------------------------------------------------------
   bool core::check_fork_time()
   {
-    HardFork::State state = m_blockchain_storage.get_hard_fork_state();
+    /*HardFork::State state = m_blockchain_storage.get_hard_fork_state();
     switch (state) {
       case HardFork::LikelyForked:
         LOG_PRINT_RED_L0(ENDL
@@ -1019,7 +1019,7 @@ namespace cryptonote
         break;
       default:
         break;
-    }
+    }*/
     return true;
   }
   //-----------------------------------------------------------------------------------------------

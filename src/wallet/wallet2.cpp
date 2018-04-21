@@ -51,6 +51,7 @@ using namespace epee;
 #include "cryptonote_core/cryptonote_basic_impl.h"
 #include "common/boost_serialization_helper.h"
 #include "common/command_line.h"
+#include "common/threadpool.h"
 #include "profile_tools.h"
 #include "crypto/crypto.h"
 #include "serialization/binary_utils.h"
@@ -91,8 +92,7 @@ using namespace cryptonote;
 
 #define FEE_ESTIMATE_GRACE_BLOCKS 10 // estimate fee valid for that many blocks
 
-#define SUBADDRESS_LOOKAHEAD_MAJOR 50
-#define SUBADDRESS_LOOKAHEAD_MINOR 200
+
 
 #define KILL_IOSERVICE()  \
     do { \
@@ -613,33 +613,30 @@ void wallet2::expand_subaddresses(const cryptonote::subaddress_index& index)
   {
     // add new accounts
     cryptonote::subaddress_index index2;
-    for (index2.major = m_subaddress_labels.size(); index2.major < index.major + SUBADDRESS_LOOKAHEAD_MAJOR; ++index2.major)
+    for (index2.major = m_subaddress_labels.size(); index2.major < index.major + m_subaddress_lookahead_major; ++index2.major)
     {
-      for (index2.minor = 0; index2.minor < (index2.major == index.major ? index.minor : 0) + SUBADDRESS_LOOKAHEAD_MINOR; ++index2.minor)
+      const uint32_t end = (index2.major == index.major ? index.minor : 0) + m_subaddress_lookahead_minor;
+      const std::vector<crypto::public_key> pkeys = cryptonote::get_subaddress_spend_public_keys(m_account.get_keys(), index2.major, 0, end);
+      for (index2.minor = 0; index2.minor < end; ++index2.minor)
       {
-        if (m_subaddresses_inv.count(index2) == 0)
-        {
-          crypto::public_key D = get_subaddress_spend_public_key(index2);
-          m_subaddresses[D] = index2;
-          m_subaddresses_inv[index2] = D;
-        }
+         const crypto::public_key &D = pkeys[index2.minor];
+         m_subaddresses[D] = index2;
       }
     }
-    m_subaddress_labels.resize(index.major + 1, { "Untitled account" });
+    m_subaddress_labels.resize(index.major + 1, {"Untitled account"});
     m_subaddress_labels[index.major].resize(index.minor + 1);
   }
   else if (m_subaddress_labels[index.major].size() <= index.minor)
   {
     // add new subaddresses
-    cryptonote::subaddress_index index2 = index;
-    for (index2.minor = m_subaddress_labels[index.major].size(); index2.minor < index.minor + SUBADDRESS_LOOKAHEAD_MINOR; ++index2.minor)
+    const uint32_t end = index.minor + m_subaddress_lookahead_minor;
+    const uint32_t begin = m_subaddress_labels[index.major].size();
+    cryptonote::subaddress_index index2 = {index.major, begin};
+    const std::vector<crypto::public_key> pkeys = cryptonote::get_subaddress_spend_public_keys(m_account.get_keys(), index2.major, index2.minor, end);
+    for (; index2.minor < end; ++index2.minor)
     {
-      if (m_subaddresses_inv.count(index2) == 0)
-      {
-        crypto::public_key D = get_subaddress_spend_public_key(index2);
-        m_subaddresses[D] = index2;
-        m_subaddresses_inv[index2] = D;
-      }
+       const crypto::public_key &D = pkeys[index2.minor - begin];
+       m_subaddresses[D] = index2;
     }
     m_subaddress_labels[index.major].resize(index.minor + 1);
   }
@@ -773,7 +770,12 @@ void wallet2::process_new_transaction(const crypto::hash &txid, const cryptonote
     int threads = tools::get_max_concurrency();
     const cryptonote::account_keys& keys = m_account.get_keys();
     crypto::key_derivation derivation;
-    generate_key_derivation(tx_pub_key, keys.m_view_secret_key, derivation);
+    if (!generate_key_derivation(tx_pub_key, keys.m_view_secret_key, derivation))
+    {
+      LOG_PRINT_L2("Failed to generate key derivation from tx pubkey, skipping");
+      static_assert(sizeof(derivation) == sizeof(rct::key), "Mismatched sizes of key_derivation and rct::key");
+      memcpy(&derivation, rct::identity().bytes, sizeof(derivation));
+    }
 
     // additional tx pubkeys and derivations for multi-destination transfers involving one or more subaddresses
     std::vector<crypto::public_key> additional_tx_pub_keys = get_additional_tx_pub_keys_from_extra(tx);
@@ -781,7 +783,10 @@ void wallet2::process_new_transaction(const crypto::hash &txid, const cryptonote
     for (size_t i = 0; i < additional_tx_pub_keys.size(); ++i)
     {
       additional_derivations.push_back({});
-      generate_key_derivation(additional_tx_pub_keys[i], keys.m_view_secret_key, additional_derivations.back());
+      if (!generate_key_derivation(additional_tx_pub_keys[i], keys.m_view_secret_key, additional_derivations.back())){
+        LOG_PRINT_L2("Failed to generate key derivation from tx pubkey, skipping");
+        additional_derivations.pop_back();
+      }
     }
 
     if (miner_tx && m_refresh_type == RefreshNoCoinbase)
@@ -1245,11 +1250,11 @@ void wallet2::process_new_blockchain_entry(const cryptonote::block& b, const cry
       ++idx;
     }
     TIME_MEASURE_FINISH(txs_handle_time);
-    LOG_PRINT_L2("Processed block: " << bl_id << ", height " << height << ", " <<  miner_tx_handle_time + txs_handle_time << "(" << miner_tx_handle_time << "/" << txs_handle_time <<")ms");
+    LOG_PRINT_L1("Processed block: " << bl_id << ", height " << height << ", " <<  miner_tx_handle_time + txs_handle_time << "(" << miner_tx_handle_time << "/" << txs_handle_time <<")ms");
   }else
   {
     if (!(height % 100))
-      LOG_PRINT_L2( "Skipped block by timestamp, height: " << height << ", block time " << b.timestamp << ", account time " << m_account.get_createtime());
+      LOG_PRINT_L1( "Skipped block by timestamp, height: " << height << ", block time " << b.timestamp << ", account time " << m_account.get_createtime());
   }
   m_blockchain.push_back(bl_id);
   ++m_local_bc_height;
@@ -1340,6 +1345,7 @@ void wallet2::process_blocks(uint64_t start_height, const std::list<cryptonote::
 
   THROW_WALLET_EXCEPTION_IF(blocks.size() != o_indices.size(), error::wallet_internal_error, "size mismatch");
 
+  tools::threadpool& tpool = tools::threadpool::getInstance();
   int threads = tools::get_max_concurrency();
   if (threads > 1)
   {
@@ -1352,22 +1358,15 @@ void wallet2::process_blocks(uint64_t start_height, const std::list<cryptonote::
     {
       size_t round_size = std::min((size_t)threads, blocks_size - b);
 
-      boost::asio::io_service ioservice;
-      boost::thread_group threadpool;
-      std::unique_ptr < boost::asio::io_service::work > work(new boost::asio::io_service::work(ioservice));
-      for (size_t i = 0; i < round_size; i++)
-      {
-        threadpool.create_thread(boost::bind(&boost::asio::io_service::run, &ioservice));
-      }
-
+     tools::threadpool::waiter waiter;
       std::list<block_complete_entry>::const_iterator tmpblocki = blocki;
       for (size_t i = 0; i < round_size; ++i)
       {
-        ioservice.dispatch(boost::bind(&wallet2::parse_block_round, this, std::cref(tmpblocki->block),
+        tpool.submit(&waiter, boost::bind(&wallet2::parse_block_round, this, std::cref(tmpblocki->block),
           std::ref(round_blocks[i]), std::ref(round_block_hashes[i]), std::ref(error[i])));
         ++tmpblocki;
       }
-      KILL_IOSERVICE();
+      waiter.wait();
       tmpblocki = blocki;
       for (size_t i = 0; i < round_size; ++i)
       {
@@ -1676,7 +1675,7 @@ void wallet2::fast_refresh(uint64_t stop_height, uint64_t &blocks_start_height, 
   std::list<crypto::hash> hashes;
   size_t current_index = m_blockchain.size();
 
-  while(m_run.load(std::memory_order_relaxed) && current_index < stop_height)
+  while (m_run.load(std::memory_order_relaxed) && current_index < stop_height)
   {
     pull_hashes(0, blocks_start_height, short_chain_history, hashes);
     if (hashes.size() < 3)
@@ -1699,12 +1698,12 @@ void wallet2::fast_refresh(uint64_t stop_height, uint64_t &blocks_start_height, 
       }
     }
     current_index = blocks_start_height;
-    BOOST_FOREACH(auto& bl_id, hashes)
+    for (auto& bl_id : hashes)
     {
       if(current_index >= m_blockchain.size())
       {
         if (!(current_index % 1000))
-          LOG_PRINT_L2( "Skipped block by height: " << current_index);
+          LOG_PRINT_L1( "Skipped block by height: " << current_index);
         m_blockchain.push_back(bl_id);
         ++m_local_bc_height;
 
@@ -1714,11 +1713,11 @@ void wallet2::fast_refresh(uint64_t stop_height, uint64_t &blocks_start_height, 
           m_callback->on_new_block(current_index, dummy);
         }
       }
-      else if(bl_id != m_blockchain[current_index])
+     /*  else if(bl_id != m_blockchain[current_index])
       {
         //split detected here !!!
         return;
-      }
+      } */
       ++current_index;
       if (current_index >= stop_height)
         return;
@@ -1760,7 +1759,8 @@ void wallet2::refresh(uint64_t start_height, uint64_t & blocks_fetched, bool& re
   size_t try_count = 0;
   crypto::hash last_tx_hash_id = m_transfers.size() ? m_transfers.back().m_txid : null_hash;
   std::list<crypto::hash> short_chain_history;
-  boost::thread pull_thread;
+  tools::threadpool& tpool = tools::threadpool::getInstance();
+  tools::threadpool::waiter waiter;
   uint64_t blocks_start_height;
   std::list<cryptonote::block_complete_entry> blocks;
   std::vector<COMMAND_RPC_GET_BLOCKS_FAST::block_output_indices> o_indices;
@@ -1794,14 +1794,25 @@ void wallet2::refresh(uint64_t start_height, uint64_t & blocks_fetched, bool& re
       std::list<cryptonote::block_complete_entry> next_blocks;
       std::vector<cryptonote::COMMAND_RPC_GET_BLOCKS_FAST::block_output_indices> next_o_indices;
       bool error = false;
-      pull_thread = boost::thread([&]{pull_next_blocks(start_height, next_blocks_start_height, short_chain_history, blocks, next_blocks, next_o_indices, error);});
+      if (blocks.empty())
+      {
+        break;
+      }
+
+      tpool.submit(&waiter, [&]{pull_next_blocks(start_height, next_blocks_start_height, short_chain_history, blocks, next_blocks, next_o_indices, error); });
 
       process_blocks(blocks_start_height, blocks, o_indices, added_blocks);
       blocks_fetched += added_blocks;
-      pull_thread.join();
+      waiter.wait();
+	  
       if(!added_blocks)
         break;
-
+      
+      if (blocks_start_height == next_blocks_start_height)
+      {
+        break;
+      }
+	  
       // switch to the new blocks from the daemon
       blocks_start_height = next_blocks_start_height;
       blocks = next_blocks;
@@ -1816,8 +1827,7 @@ void wallet2::refresh(uint64_t start_height, uint64_t & blocks_fetched, bool& re
     catch (const std::exception&)
     {
       blocks_fetched += added_blocks;
-      if (pull_thread.joinable())
-        pull_thread.join();
+      waiter.wait();
       if(try_count < 3)
       {
         LOG_PRINT_L1("Another try pull_blocks (try_count=" << try_count << ")...");
@@ -2257,14 +2267,14 @@ crypto::secret_key wallet2::generate(const std::string& wallet_, const std::stri
   if(m_refresh_from_block_height == 0 && !recover){
     // Wallets created offline don't know blockchain height.
     // Set blockchain height calculated from current date/time
-    // -1 month for fluctuations in block time and machine date/time setup.
+    // -1 week for fluctuations in block time and machine date/time setup.
     // avg seconds per block
     const int seconds_per_block = DIFFICULTY_TARGET;
-    // ~num blocks per month
-    const uint64_t blocks_per_month = 60*60*24*30/seconds_per_block;
+    // ~num blocks per week
+    const uint64_t blocks_per_week = 60*60*24*7/seconds_per_block;
     uint64_t approx_blockchain_height = get_approximate_blockchain_height();
     if(approx_blockchain_height > 0) {
-      m_refresh_from_block_height = approx_blockchain_height - blocks_per_month;
+      m_refresh_from_block_height = approx_blockchain_height - blocks_per_week;
     }
   }
   bool r = store_keys(m_keys_file, password, false);
@@ -5017,13 +5027,16 @@ uint64_t wallet2::get_approximate_blockchain_height() const
 {
   if (m_testnet) return 0;
   // time of v2 fork
-  const time_t fork_time = 1458748658;
+  const time_t fork_time = 1524348153;
   // v2 fork block
-  const uint64_t fork_block = 1009827;
+  const uint64_t fork_block = 10000;
   // avg seconds per block
   const int seconds_per_block = DIFFICULTY_TARGET;
   // Calculated blockchain height
-  uint64_t approx_blockchain_height = fork_block + (time(NULL) - fork_time)/seconds_per_block;
+  time_t current_time = time(NULL);
+  if (current_time <= 0) 
+    current_time = fork_time;
+  uint64_t approx_blockchain_height = fork_block + (current_time - fork_time) / seconds_per_block;
   LOG_PRINT_L2("Calculated blockchain height: " << approx_blockchain_height);
   return approx_blockchain_height;
 }

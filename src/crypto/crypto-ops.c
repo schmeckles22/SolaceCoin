@@ -1235,15 +1235,15 @@ void ge_double_scalarmult_base_vartime(ge_p2 *r, const unsigned char *a, const g
   }
 }
 
-/* From ge_frsolytes.c, modified */
+/* From ge_frombytes.c, modified */
 
-int ge_frsolytes_vartime(ge_p3 *h, const unsigned char *s) {
+int ge_frombytes_vartime(ge_p3 *h, const unsigned char *s) {
   fe u;
   fe v;
   fe vxx;
   fe check;
 
-  /* From fe_frsolytes.c */
+  /* From fe_frombytes.c */
 
   int64_t h0 = load_4(s);
   int64_t h1 = load_3(s + 4) << 6;
@@ -1296,7 +1296,7 @@ int ge_frsolytes_vartime(ge_p3 *h, const unsigned char *s) {
   h->Y[8] = h8;
   h->Y[9] = h9;
 
-  /* End fe_frsolytes.c */
+  /* End fe_frombytes.c */
 
   fe_1(h->Z);
   fe_sq(u, h->Y);
@@ -2051,11 +2051,11 @@ void ge_mul8(ge_p1p1 *r, const ge_p2 *t) {
   ge_p2_dbl(r, &u);
 }
 
-void ge_fromfe_frsolytes_vartime(ge_p2 *r, const unsigned char *s) {
+void ge_fromfe_frombytes_vartime(ge_p2 *r, const unsigned char *s) {
   fe u, v, w, x, y, z;
   unsigned char sign;
 
-  /* From fe_frsolytes.c */
+  /* From fe_frombytes.c */
 
   int64_t h0 = load_4(s);
   int64_t h1 = load_3(s + 4) << 6;
@@ -2101,7 +2101,7 @@ void ge_fromfe_frsolytes_vartime(ge_p2 *r, const unsigned char *s) {
   u[8] = h8;
   u[9] = h9;
 
-  /* End fe_frsolytes.c */
+  /* End fe_frombytes.c */
 
   fe_sq2(v, u); /* 2 * u^2 */
   fe_1(w);

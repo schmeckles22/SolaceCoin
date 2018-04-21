@@ -1,5 +1,4 @@
 // Copyright (c) 2014-2017, The Monero Project
-// Copyright (c) 2017, SUMOKOIN
 // 
 // All rights reserved.
 // 
@@ -127,7 +126,7 @@ namespace crypto {
 
   bool crypto_ops::check_key(const public_key &key) {
     ge_p3 point;
-    return ge_frsolytes_vartime(&point, &key) == 0;
+    return ge_frombytes_vartime(&point, &key) == 0;
   }
 
   bool crypto_ops::secret_key_to_public_key(const secret_key &sec, public_key &pub) {
@@ -145,7 +144,7 @@ namespace crypto {
     ge_p2 point2;
     ge_p1p1 point3;
     assert(sc_check(&key2) == 0);
-    if (ge_frsolytes_vartime(&point, &key1) != 0) {
+    if (ge_frombytes_vartime(&point, &key1) != 0) {
       return false;
     }
     ge_scalarmult(&point2, &key2, &point);
@@ -175,7 +174,7 @@ namespace crypto {
     ge_cached point3;
     ge_p1p1 point4;
     ge_p2 point5;
-    if (ge_frsolytes_vartime(&point1, &base) != 0) {
+    if (ge_frombytes_vartime(&point1, &base) != 0) {
       return false;
     }
     derivation_to_scalar(derivation, output_index, scalar);
@@ -202,7 +201,7 @@ namespace crypto {
     ge_cached point3;
     ge_p1p1 point4;
     ge_p2 point5;
-    if (ge_frsolytes_vartime(&point1, &out_key) != 0) {
+    if (ge_frombytes_vartime(&point1, &out_key) != 0) {
       return false;
     }
     derivation_to_scalar(derivation, output_index, scalar);
@@ -258,7 +257,7 @@ namespace crypto {
     assert(check_key(pub));
     buf.h = prefix_hash;
     buf.key = pub;
-    if (ge_frsolytes_vartime(&tmp3, &pub) != 0) {
+    if (ge_frombytes_vartime(&tmp3, &pub) != 0) {
       return false;
     }
     if (sc_check(&sig.c) != 0 || sc_check(&sig.r) != 0) {
@@ -277,10 +276,10 @@ namespace crypto {
     ge_p3 A_p3;
     ge_p3 B_p3;
     ge_p3 D_p3;
-    if (ge_frsolytes_vartime(&R_p3, &R) != 0) throw std::runtime_error("tx pubkey is invalid");
-    if (ge_frsolytes_vartime(&A_p3, &A) != 0) throw std::runtime_error("recipient view pubkey is invalid");
-    if (B && ge_frsolytes_vartime(&B_p3, &*B) != 0) throw std::runtime_error("recipient spend pubkey is invalid");
-    if (ge_frsolytes_vartime(&D_p3, &D) != 0) throw std::runtime_error("key derivation is invalid");
+    if (ge_frombytes_vartime(&R_p3, &R) != 0) throw std::runtime_error("tx pubkey is invalid");
+    if (ge_frombytes_vartime(&A_p3, &A) != 0) throw std::runtime_error("recipient view pubkey is invalid");
+    if (B && ge_frombytes_vartime(&B_p3, &*B) != 0) throw std::runtime_error("recipient spend pubkey is invalid");
+    if (ge_frombytes_vartime(&D_p3, &D) != 0) throw std::runtime_error("key derivation is invalid");
 #if !defined(NDEBUG)
     {
       assert(sc_check(&r) == 0);
@@ -349,10 +348,10 @@ namespace crypto {
     ge_p3 A_p3;
     ge_p3 B_p3;
     ge_p3 D_p3;
-    if (ge_frsolytes_vartime(&R_p3, &R) != 0) return false;
-    if (ge_frsolytes_vartime(&A_p3, &A) != 0) return false;
-    if (B && ge_frsolytes_vartime(&B_p3, &*B) != 0) return false;
-    if (ge_frsolytes_vartime(&D_p3, &D) != 0) return false;
+    if (ge_frombytes_vartime(&R_p3, &R) != 0) return false;
+    if (ge_frombytes_vartime(&A_p3, &A) != 0) return false;
+    if (B && ge_frombytes_vartime(&B_p3, &*B) != 0) return false;
+    if (ge_frombytes_vartime(&D_p3, &D) != 0) return false;
     if (sc_check(&sig.c) != 0 || sc_check(&sig.r) != 0) return false;
 
     // compute sig.c*R
@@ -362,7 +361,7 @@ namespace crypto {
       ge_scalarmult(&cR_p2, &sig.c, &R_p3);
       public_key cR;
       ge_tobytes(&cR, &cR_p2);
-      if (ge_frsolytes_vartime(&cR_p3, &cR) != 0) return false;
+      if (ge_frombytes_vartime(&cR_p3, &cR) != 0) return false;
     }
 
     ge_p1p1 X_p1p1;
@@ -374,7 +373,7 @@ namespace crypto {
       public_key rB;
       ge_tobytes(&rB, &rB_p2);
       ge_p3 rB_p3;
-      if (ge_frsolytes_vartime(&rB_p3, &rB) != 0) return false;
+      if (ge_frombytes_vartime(&rB_p3, &rB) != 0) return false;
       ge_cached rB_cached;
       ge_p3_to_cached(&rB_cached, &rB_p3);
       ge_add(&X_p1p1, &cR_p3, &rB_cached);
@@ -406,8 +405,8 @@ namespace crypto {
     ge_tobytes(&rA, &rA_p2);
     ge_p3 cD_p3;
     ge_p3 rA_p3;
-    if (ge_frsolytes_vartime(&cD_p3, &cD) != 0) return false;
-    if (ge_frsolytes_vartime(&rA_p3, &rA) != 0) return false;
+    if (ge_frombytes_vartime(&cD_p3, &cD) != 0) return false;
+    if (ge_frombytes_vartime(&rA_p3, &rA) != 0) return false;
     ge_cached rA_cached;
     ge_p3_to_cached(&rA_cached, &rA_p3);
     ge_p1p1 Y_p1p1;
@@ -434,7 +433,7 @@ namespace crypto {
     ge_p2 point;
     ge_p1p1 point2;
     cn_fast_hash(std::addressof(key), sizeof(public_key), h);
-    ge_fromfe_frsolytes_vartime(&point, reinterpret_cast<const unsigned char *>(&h));
+    ge_fromfe_frombytes_vartime(&point, reinterpret_cast<const unsigned char *>(&h));
     ge_mul8(&point2, &point);
     ge_p1p1_to_p3(&res, &point2);
   }
@@ -489,7 +488,7 @@ namespace crypto {
       }
     }
 #endif
-    if (ge_frsolytes_vartime(&image_unp, &image) != 0) {
+    if (ge_frombytes_vartime(&image_unp, &image) != 0) {
       abort();
     }
     ge_dsm_precomp(image_pre, &image_unp);
@@ -509,7 +508,7 @@ namespace crypto {
       else {
         random_scalar(sig[i].c);
         random_scalar(sig[i].r);
-        if (ge_frsolytes_vartime(&tmp3, &*pubs[i]) != 0) {
+        if (ge_frombytes_vartime(&tmp3, &*pubs[i]) != 0) {
           abort();
         }
         ge_double_scalarmult_base_vartime(&tmp2, &sig[i].c, &tmp3, &sig[i].r);
@@ -538,7 +537,7 @@ namespace crypto {
       assert(check_key(*pubs[i]));
     }
 #endif
-    if (ge_frsolytes_vartime(&image_unp, &image) != 0) {
+    if (ge_frombytes_vartime(&image_unp, &image) != 0) {
       return false;
     }
     ge_dsm_precomp(image_pre, &image_unp);
@@ -550,7 +549,7 @@ namespace crypto {
       if (sc_check(&sig[i].c) != 0 || sc_check(&sig[i].r) != 0) {
         return false;
       }
-      if (ge_frsolytes_vartime(&tmp3, &*pubs[i]) != 0) {
+      if (ge_frombytes_vartime(&tmp3, &*pubs[i]) != 0) {
         return false;
       }
       ge_double_scalarmult_base_vartime(&tmp2, &sig[i].c, &tmp3, &sig[i].r);
