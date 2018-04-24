@@ -275,18 +275,20 @@ namespace cryptonote
       return true;
     }
 
-    /* As I don't know if accessing hshd from core could be a good practice,
-    I prefer pushing target height to the core at the same time it is pushed to the user.
-    Nz. */
-    m_core.set_target_blockchain_height(static_cast<int64_t>(hshd.current_height));
+    if (hshd.current_height > target) {
+      /* As I don't know if accessing hshd from core could be a good practice,
+      I prefer pushing target height to the core at the same time it is pushed to the user.
+      Nz. */
+      m_core.set_target_blockchain_height(static_cast<int64_t>(hshd.current_height));
 
-    int64_t diff = static_cast<int64_t>(hshd.current_height) - static_cast<int64_t>(m_core.get_current_blockchain_height());
-	
-    LOG_PRINT_CCONTEXT_YELLOW("Sync data returned a new top block candidate: " << m_core.get_current_blockchain_height() << " -> " << hshd.current_height
-      << " [Your node is " << std::abs(diff) << " blocks (" << (abs(diff) / (24 * 60 * 60 / DIFFICULTY_TARGET)) << " days) "
-      << (0 <= diff ? std::string("behind") : std::string("ahead"))
-      << "] " << ENDL << "SYNCHRONIZATION started", (is_inital ? LOG_LEVEL_0:LOG_LEVEL_1));
-    
+      int64_t diff = static_cast<int64_t>(hshd.current_height) - static_cast<int64_t>(m_core.get_current_blockchain_height());
+
+      LOG_PRINT_CCONTEXT_YELLOW("Sync data returned a new top block candidate: " << m_core.get_current_blockchain_height() << " -> " << hshd.current_height
+        << " [Your node is " << std::abs(diff) << " blocks (" << (abs(diff) / (24 * 60 * 60 / DIFFICULTY_TARGET)) << " days) "
+        << (0 <= diff ? std::string("behind") : std::string("ahead"))
+        << "] " << ENDL << "SYNCHRONIZATION started", (is_inital ? LOG_LEVEL_0:LOG_LEVEL_1));
+    }
+
     LOG_PRINT_L1("Remote blockchain height: " << hshd.current_height << ", id: " << hshd.top_id);
     
     context.m_state = cryptonote_connection_context::state_synchronizing;
