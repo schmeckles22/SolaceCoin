@@ -2,7 +2,7 @@
 /// @author rfree (current maintainer/user in monero.cc project - most of code is from CryptoNote)
 /// @brief This is the orginal cryptonote protocol network-events handler, modified by us
 
-// Copyright (c) 2014-2017, The Monero Project
+// Copyright (c) 2014-2018, The Monero Project
 // Copyright (c) 2017, SUMOKOIN
 //
 // All rights reserved.
@@ -275,6 +275,11 @@ namespace cryptonote
       return true;
     }
 
+    uint64_t target = m_core.get_target_blockchain_height();
+    if (target == 0) {
+      target = m_core.get_current_blockchain_height();
+    }
+
     if (hshd.current_height > target) {
       /* As I don't know if accessing hshd from core could be a good practice,
       I prefer pushing target height to the core at the same time it is pushed to the user.
@@ -287,6 +292,10 @@ namespace cryptonote
         << " [Your node is " << std::abs(diff) << " blocks (" << (abs(diff) / (24 * 60 * 60 / DIFFICULTY_TARGET)) << " days) "
         << (0 <= diff ? std::string("behind") : std::string("ahead"))
         << "] " << ENDL << "SYNCHRONIZATION started", (is_inital ? LOG_LEVEL_0:LOG_LEVEL_1));
+    } else if (hshd.current_height < target - 100) {
+      LOG_PRINT_L1("Skipping out of date node: " << hshd.current_height << ", id: " << hshd.top_id);
+      // If the node is more than 100 blocks behind; skip it.
+      return false;
     }
 
     LOG_PRINT_L1("Remote blockchain height: " << hshd.current_height << ", id: " << hshd.top_id);
