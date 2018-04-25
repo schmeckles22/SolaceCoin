@@ -46,7 +46,7 @@ invokes cmake commands as needed.
 
 * Change to the root of the source code directory and build:
 
-        cd solre
+        cd solace
         make
 
     *Optional*: If your machine has several cores and enough memory, enable
@@ -56,9 +56,9 @@ invokes cmake commands as needed.
 
 * The resulting executables can be found in `build/release/bin`
 
-* Add `PATH="$PATH:$HOME/solre/build/release/bin"` to `.profile`
+* Add `PATH="$PATH:$HOME/solace/build/release/bin"` to `.profile`
 
-* Run Solace with `solred --detach`
+* Run Solace with `solaced --detach`
 
 * **Optional**: build and run the test suite to verify the binaries:
 
@@ -110,16 +110,16 @@ Tested on a Raspberry Pi 2 with a clean install of minimal Debian Jessie from ht
 
 * Change to the root of the source code directory and build:
 
-        cd solre
+        cd solace
         make release
 
 * Wait ~4 hours
 
 * The resulting executables can be found in `build/release/bin`
 
-* Add `PATH="$PATH:$HOME/solre/build/release/bin"` to `.profile`
+* Add `PATH="$PATH:$HOME/solace/build/release/bin"` to `.profile`
 
-* Run Solace with `solred --detach`
+* Run Solace with `solaced --detach`
 
 * You may wish to reduce the size of the swap file after the build has finished, and delete the boost directory from your home directory
 
@@ -182,7 +182,7 @@ application.
 
 * Clone source code, change to the root of the source code directory and build:
 
-        git clone https://github.com/solre-projects/solre; cd solre; make release-static;
+        git clone https://github.com/solace-projects/solace; cd solace; make release-static;
 
 
 ### On OpenBSD:
@@ -212,15 +212,15 @@ By default, in either dynamically or statically linked builds, binaries target t
 * ```make release-static-win64``` builds binaries on 64-bit Windows portable across 64-bit Windows systems
 * ```make release-static-win32``` builds binaries on 64-bit or 32-bit Windows portable across 32-bit Windows systems
 
-## Running solred
+## Running solaced
 
 The build places the binary in `bin/` sub-directory within the build directory
 from which cmake was invoked (repository root by default). To run in
 foreground:
 
-    ./bin/solred
+    ./bin/solaced
 
-To list all available options, run `./bin/solred --help`.  Options can be
+To list all available options, run `./bin/solaced --help`.  Options can be
 specified either on the command line or in a configuration file passed by the
 `--config-file` argument.  To specify an option in the configuration file, add
 a line with the syntax `argumentname=value`, where `argumentname` is the name
@@ -228,17 +228,17 @@ of the argument without the leading dashes, for example `log-level=1`.
 
 To run in background:
 
-    ./bin/solred --log-file solred.log --detach
+    ./bin/solaced --log-file solaced.log --detach
 
 To run as a systemd service, copy
-[solred.service](utils/systemd/solred.service) to `/etc/systemd/system/` and
-[solred.conf](utils/conf/solred.conf) to `/etc/`. The [example
-service](utils/systemd/solred.service) assumes that the user `solre` exists
+[solaced.service](utils/systemd/solaced.service) to `/etc/systemd/system/` and
+[solaced.conf](utils/conf/solaced.conf) to `/etc/`. The [example
+service](utils/systemd/solaced.service) assumes that the user `solace` exists
 and its home is the data directory specified in the [example
-config](utils/conf/solred.conf).
+config](utils/conf/solaced.conf).
 
 If you're on Mac, you may need to add the `--max-concurrency 1` option to
-solre-wallet-cli, and possibly solred, if you get crashes refreshing.
+solace-wallet-cli, and possibly solaced, if you get crashes refreshing.
 
 ## Internationalization
 
@@ -246,27 +246,27 @@ Please see [README.i18n](README.i18n)
 
 ## Using Tor
 
-While Solace isn't made to integrate with Tor, it can be used wrapped with torsocks, if you add --p2p-bind-ip 127.0.0.1 to the solred command line. You also want to set DNS requests to go over TCP, so they'll be routed through Tor, by setting DNS_PUBLIC=tcp. You may also disable IGD (UPnP port forwarding negotiation), which is pointless with Tor. To allow local connections from the wallet, you might have to add TORSOCKS_ALLOW_INBOUND=1, some OSes need it and some don't. Example:
+While Solace isn't made to integrate with Tor, it can be used wrapped with torsocks, if you add --p2p-bind-ip 127.0.0.1 to the solaced command line. You also want to set DNS requests to go over TCP, so they'll be routed through Tor, by setting DNS_PUBLIC=tcp. You may also disable IGD (UPnP port forwarding negotiation), which is pointless with Tor. To allow local connections from the wallet, you might have to add TORSOCKS_ALLOW_INBOUND=1, some OSes need it and some don't. Example:
 
-`DNS_PUBLIC=tcp torsocks solred --p2p-bind-ip 127.0.0.1 --no-igd`
+`DNS_PUBLIC=tcp torsocks solaced --p2p-bind-ip 127.0.0.1 --no-igd`
 
 or:
 
-`DNS_PUBLIC=tcp TORSOCKS_ALLOW_INBOUND=1 torsocks solred --p2p-bind-ip 127.0.0.1 --no-igd`
+`DNS_PUBLIC=tcp TORSOCKS_ALLOW_INBOUND=1 torsocks solaced --p2p-bind-ip 127.0.0.1 --no-igd`
 
 TAILS ships with a very restrictive set of firewall rules. Therefore, you need to add a rule to allow this connection too, in addition to telling torsocks to allow inbound connections. Full example:
 
 `sudo iptables -I OUTPUT 2 -p tcp -d 127.0.0.1 -m tcp --dport 18081 -j ACCEPT`
 
-`DNS_PUBLIC=tcp torsocks ./solred --p2p-bind-ip 127.0.0.1 --no-igd --rpc-bind-ip 127.0.0.1 --data-dir /home/your/directory/to/the/blockchain`
+`DNS_PUBLIC=tcp torsocks ./solaced --p2p-bind-ip 127.0.0.1 --no-igd --rpc-bind-ip 127.0.0.1 --data-dir /home/your/directory/to/the/blockchain`
 
-`./solre-wallet-cli`
+`./solace-wallet-cli`
 
 ## Using readline
 
-While `solred` and `solre-wallet-cli` do not use readline directly, most of the functionality can be obtained by running them via `rlwrap`. This allows command recall, edit capabilities, etc. It does not give autocompletion without an extra completion file, however. To use rlwrap, simply prepend `rlwrap` to the command line, eg:
+While `solaced` and `solace-wallet-cli` do not use readline directly, most of the functionality can be obtained by running them via `rlwrap`. This allows command recall, edit capabilities, etc. It does not give autocompletion without an extra completion file, however. To use rlwrap, simply prepend `rlwrap` to the command line, eg:
 
-`rlwrap bin/solre-wallet-cli --wallet-file /path/to/wallet`
+`rlwrap bin/solace-wallet-cli --wallet-file /path/to/wallet`
 
 Note: rlwrap will save things like your seed and private keys, if you supply them on prompt. You may want to not use rlwrap when you use simplewallet to restore from seed, etc.
 
@@ -284,7 +284,7 @@ Instructions for debugging suspected blockchain corruption as per @HYC
 
 There is an `mdb_stat` command in the LMDB source that can print statistics about the database but it's not routinely built. This can be built with the following command:
 
-`cd ~/solre/external/db_drivers/liblmdb && make`
+`cd ~/solace/external/db_drivers/liblmdb && make`
 
 The output of `mdb_stat -ea <path to blockchain dir>` will indicate inconsistencies in the blocks, block_heights and block_info table.
 
