@@ -891,7 +891,7 @@ namespace cryptonote
           uint64_t dismiss = 1;
           for (const auto &h: block_hashes) {
             if (top_hash == h) {
-              LOG_PRINT_CCONTEXT_L1(context, "Found current top block in synced blocks, dismissing "
+              LOG_PRINT_CCONTEXT_L1( "Found current top block in synced blocks, dismissing "
                   << dismiss << "/" << arg.blocks.size() << " blocks");
               while (dismiss--)
                 arg.blocks.pop_front();
