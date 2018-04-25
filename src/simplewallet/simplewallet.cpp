@@ -599,6 +599,7 @@ simple_wallet::simple_wallet()
   m_cmd_binder.set_handler("transfer", boost::bind(&simple_wallet::transfer_new, this, _1), tr("transfer [index=<N1>[,<N2>,...]] [<priority>] [<mixin_count>] <address> <amount> [<payment_id>] - Transfer <amount> to <address>. If the parameter \"index=<N1>[,<N2>,...]\" is specified, the wallet uses outputs received by addresses of those indices. If omitted, the wallet randomly chooses address indices to be used. In any case, it tries its best not to combine outputs across multiple addresses. <priority> is the priority of the transaction. The higher the priority, the higher the fee of the transaction. Valid values in priority order (from lowest to highest) are: unimportant, normal, elevated, priority. If omitted, the default value (see the command \"set priority\") is used. <mixin_count> is the number of extra inputs to include for untraceability. Multiple payments can be made at once by adding <address_2> <amount_2> etcetera (before the payment ID, if it's included)"));
   m_cmd_binder.set_handler("locked_transfer", boost::bind(&simple_wallet::locked_transfer, this, _1), tr("locked_transfer [index=<N1>[,<N2>,...]] [<priority>] [<mixin_count>] <addr> <amount> <lockblocks> [<payment_id>] - Same as transfer, but with number of blocks to lock the transaction for, max 1000000"));
   m_cmd_binder.set_handler("sweep_all", boost::bind(&simple_wallet::sweep_all, this, _1), tr("sweep_all [index=<N1>[,<N2>,...]] [<mixin_count>] <address> [<payment_id>] - Send all unlocked balance to an address. If the parameter \"index<N1>[,<N2>,...]\" is specified, the wallet sweeps outputs received by those address indices. If omitted, the wallet randomly chooses an address index to be used."));
+  m_cmd_binder.set_handler("donate", boost::bind(&simple_wallet::donate, this, _1), tr("donate [<mixin_count>] <amount> [payment_id] - Donate <amount> to the charity wallet (charity.solace-coin.com)"));
   m_cmd_binder.set_handler("sign_transfer", boost::bind(&simple_wallet::sign_transfer, this, _1), tr("Sign a transaction from a file"));
   m_cmd_binder.set_handler("submit_transfer", boost::bind(&simple_wallet::submit_transfer, this, _1), tr("Submit a signed transaction from a file"));
   m_cmd_binder.set_handler("set_log", boost::bind(&simple_wallet::set_log, this, _1), tr("set_log <level> - Change current log detail level, <0-4>"));
@@ -2716,6 +2717,46 @@ bool simple_wallet::sweep_all(const std::vector<std::string> &args_, bool retry,
 
   if (retry) sweep_all(args_, retry, tx_size_target_factor);
 
+  return true;
+}
+ //----------------------------------------------------------------------------------------------------
+bool simple_wallet::donate(const std::vector<std::string> &args_)
+{
+  std::vector<std::string> local_args = args_;
+  if(local_args.empty() || local_args.size() > 3)
+  {
+     fail_msg_writer() << tr("wrong number of arguments");
+     return true;
+  }
+  std::string mixin_str;
+  std::string address_str = "So319SrYFQjA5WNfgnveSGTReFg8Gfc69iHgRG8hDK6VTeA8LieYjWu1zQe276WiFfaR9s8Fy3FbkAuLKdWmbJ5u2FZRPukGB";
+  std::string amount_str;
+  std::string payment_id_str;
+  // check payment id
+  crypto::hash payment_id;
+  crypto::hash8 payment_id8;
+  if (tools::wallet2::parse_long_payment_id (local_args.back(), payment_id ) ||
+      tools::wallet2::parse_short_payment_id(local_args.back(), payment_id8))
+  {
+    payment_id_str = local_args.back();
+    local_args.pop_back();
+  }
+  // check mixin
+  if (local_args.size() > 1)
+  {
+    mixin_str = local_args[0];
+    local_args.erase(local_args.begin());
+  }
+  amount_str = local_args[0];
+  // refill args as necessary
+  local_args.clear();
+  if (!mixin_str.empty())
+    local_args.push_back(mixin_str);
+  local_args.push_back(address_str);
+  local_args.push_back(amount_str);
+  if (!payment_id_str.empty())
+    local_args.push_back(payment_id_str);
+  transfer_new(local_args);
   return true;
 }
 //----------------------------------------------------------------------------------------------------

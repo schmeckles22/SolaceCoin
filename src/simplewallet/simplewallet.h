@@ -129,6 +129,7 @@ namespace cryptonote
     bool locked_transfer(const std::vector<std::string> &args);
     bool sweep_all(const std::vector<std::string> &args);
     bool sweep_all(const std::vector<std::string> &args, bool retry=false, float tx_size_target_factor = 1.0f);
+	bool donate(const std::vector<std::string> &args);
     bool sign_transfer(const std::vector<std::string> &args);
     bool submit_transfer(const std::vector<std::string> &args);
     std::vector<std::vector<cryptonote::tx_destination_entry>> split_amounts(
