@@ -878,7 +878,7 @@ namespace cryptonote
 
         uint64_t previous_height = m_core.get_current_blockchain_height();
 
-		+        // we lock all the rest to avoid having multiple connections redo a lot
+	        // we lock all the rest to avoid having multiple connections redo a lot
         // of the same work, and one of them doing it for nothing: subsequent
         // connections will wait until the current one's added its blocks, then
         // will add any extra it has, if any
