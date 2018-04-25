@@ -1,4 +1,6 @@
-// Copyright (c) 2017, OMBRE, (forked from) The Monero Project
+// Copyright (c) 2014-2018, The Monero Project
+// Copyright (c) 2018, SUMOKOIN
+// Copyright (c) 2014-2018, Solace Charity Coin Project
 //
 // All rights reserved.
 //
