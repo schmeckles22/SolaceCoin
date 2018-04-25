@@ -1,7 +1,8 @@
 // Word list created by Monero contributor sammy007
 // 
-// Copyright (c) 2014-2017, The Monero Project
-// Copyright (c) 2017, SUMOKOIN
+// Copyright (c) 2014-2018, The Monero Project
+// Copyright (c) 2018, SUMOKOIN
+// Copyright (c) 2014-2018, Solace Charity Coin Project
 // 
 // All rights reserved.
 // 
