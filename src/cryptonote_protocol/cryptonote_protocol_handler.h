@@ -139,6 +139,7 @@ namespace cryptonote
     std::atomic<bool> m_synchronized;
     bool m_one_request = true;
     std::atomic<bool> m_stopping;
+	epee::critical_section m_sync_lock;
 
 		// static std::ofstream m_logreq;
     boost::mutex m_buffer_mutex;
