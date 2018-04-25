@@ -12,7 +12,7 @@ SolaceCoin is a cryptonote currency and an indirect for of the well-known Monero
 Some main differences compared to other cryptonote coins are:
 
  - We use a 60 second block window which reduce transaction times
- - We enforce a minimum transaction mixin of 10 to fight blockchain analysis which could compromise privacy
+ - We enforce a minimum transaction mixin of 2 to fight blockchain analysis which could compromise privacy
  - We actively cooperate with other cryptonote coins and do not treat them as competition.
 
 
@@ -23,8 +23,8 @@ We do not have a premine. Instead we have a project development reward that caus
 ```
 f(x) = 0.06 * (1 - sqrt(x)) where x = current_supply / max_supply S.T. current_supply <= max_supply
 ```
-
-The development fee will be used to pay for development, exchanges and marketing.
+- 30% of the development fee will go into the charity support wallet.
+- The rest development fee will be used to pay for development, exchanges and marketing.
 
 ## Coin Supply & Emission
 
@@ -46,6 +46,10 @@ accelerated in the next few years before declined and depleted). This great emis
 | 2018-04-12        | v2        | v0.1.1                 | v0.1.1                    | "Colossus of Rhodes" / Hard fork to solve transaction fees |
 | 2018-04-19        | v3        | v0.2.0                 | v0.2.0                    | "Hanging Gardens of Babylon" / ASIC Resistance - CryptoNight-Heavy |
 
+
+## DONATIONS
+
+You can easily donate SOLACE to our charity wallet directly from the CLI Wallet using "donate" command.
 
 ## Roadmap 2018
 Quarter 2
