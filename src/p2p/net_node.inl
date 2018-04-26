@@ -69,8 +69,8 @@ namespace nodetool
 {
   namespace
   {
-    const int64_t default_limit_up = 8192;
-    const int64_t default_limit_down = 24576;
+    const int64_t default_limit_up = 4096;
+    const int64_t default_limit_down = 8192;
     const command_line::arg_descriptor<std::string> arg_p2p_bind_ip        = {"p2p-bind-ip", "Interface for p2p network protocol", "0.0.0.0"};
     const command_line::arg_descriptor<std::string> arg_p2p_bind_port = {
         "p2p-bind-port"
