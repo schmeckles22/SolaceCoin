@@ -2301,6 +2301,9 @@ void BlockchainLMDB::batch_commit()
     throw0(DB_ERROR("batch transaction not in progress"));
   if (m_write_batch_txn == nullptr)
     throw0(DB_ERROR("batch transaction not in progress"));
+  if (m_writer != boost::this_thread::get_id())
+    return; // batch txn owned by other thread
+
   check_open();
 
   LOG_PRINT_L3("batch transaction: committing...");
@@ -2325,6 +2328,8 @@ void BlockchainLMDB::batch_stop()
     throw0(DB_ERROR("batch transaction not in progress"));
   if (m_write_batch_txn == nullptr)
     throw0(DB_ERROR("batch transaction not in progress"));
+  if (m_writer != boost::this_thread::get_id())
+    return; // batch txn owned by other thread
   check_open();
   LOG_PRINT_L3("batch transaction: committing...");
   TIME_MEASURE_START(time1);
@@ -2347,6 +2352,8 @@ void BlockchainLMDB::batch_abort()
     throw0(DB_ERROR("batch transactions not enabled"));
   if (! m_batch_active)
     throw0(DB_ERROR("batch transaction not in progress"));
+  if (m_writer != boost::this_thread::get_id())
+    return; // batch txn owned by other thread
   check_open();
   // for destruction of batch transaction
   m_write_txn = nullptr;
