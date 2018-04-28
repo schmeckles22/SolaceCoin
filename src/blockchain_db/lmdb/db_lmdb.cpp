@@ -662,11 +662,11 @@ void BlockchainLMDB::add_block(const block& blk, const size_t& block_size, const
 void BlockchainLMDB::remove_block()
 {
   int result;
-  uint64_t m_height = height();
 
   LOG_PRINT_L3("BlockchainLMDB::" << __func__);
   check_open();
-
+  uint64_t m_height = height();
+  
   if (m_height == 0)
     throw0(BLOCK_DNE ("Attempting to remove block from an empty blockchain"));
 
