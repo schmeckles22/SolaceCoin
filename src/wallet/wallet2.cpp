@@ -1799,25 +1799,6 @@ void wallet2::refresh(uint64_t start_height, uint64_t & blocks_fetched, bool& re
       std::list<cryptonote::block_complete_entry> next_blocks;
       std::vector<cryptonote::COMMAND_RPC_GET_BLOCKS_FAST::block_output_indices> next_o_indices;
       bool error = false;
-<<<<<<< HEAD
-      if (blocks.empty())
-      {
-        break;
-      }
-
-      tpool.submit(&waiter, [&]{pull_next_blocks(start_height, next_blocks_start_height, short_chain_history, blocks, next_blocks, next_o_indices, error); });
-
-      process_blocks(blocks_start_height, blocks, o_indices, added_blocks);
-      blocks_fetched += added_blocks;
-      waiter.wait();
-	  
-=======
-      pull_thread = boost::thread([&]{pull_next_blocks(start_height, next_blocks_start_height, short_chain_history, blocks, next_blocks, next_o_indices, error);});
-
-      process_blocks(blocks_start_height, blocks, o_indices, added_blocks);
-      blocks_fetched += added_blocks;
-      pull_thread.join();
->>>>>>> parent of 97f4076... Replace thread pool management (partially) and reduce get_block to 100
       if(!added_blocks)
         break;
       
