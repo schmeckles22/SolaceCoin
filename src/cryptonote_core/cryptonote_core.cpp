@@ -326,7 +326,7 @@ namespace cryptonote
     const std::string filename = folder.string();
     // temporarily default to fastest:async:1000
     blockchain_db_sync_mode sync_mode = db_async;
-    uint64_t blocks_per_sync = 1000;
+    uint64_t blocks_per_sync = 1;
 
     try
     {
@@ -360,7 +360,10 @@ namespace cryptonote
         else if(options[0] == "fast")
           db_flags = DBS_FAST_MODE;
         else if(options[0] == "fastest")
+		{
           db_flags = DBS_FASTEST_MODE;
+          blocks_per_sync = 1000; // default to fastest:async:1000
+        }
         else
           db_flags = DEFAULT_FLAGS;
       }
