@@ -49,7 +49,8 @@
 #define CURRENT_BLOCK_MAJOR_VERSION                     1
 #define CURRENT_BLOCK_MINOR_VERSION                     1
 #define CRYPTONOTE_V2_POW_BLOCK_VERSION                 3
-#define CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT              60*60*2
+#define BLOCK_MAJOR_VERSION_4							4
+#define CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT              DIFFICULTY_TARGET * 7
 #define CRYPTONOTE_DEFAULT_TX_SPENDABLE_AGE             10
 #define BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW               60
 
@@ -84,9 +85,11 @@
 
 #define DIFFICULTY_TARGET                               60  // seconds
 #define DIFFICULTY_WINDOW                               93  // blocks
+#define DIFFICULTY_WINDOW_V2                            60 // blocks
 #define DIFFICULTY_LAG                                  15   // !!!
 #define DIFFICULTY_CUT                                  60   // timestamps to cut after sorting
 #define DIFFICULTY_BLOCKS_COUNT                         DIFFICULTY_WINDOW
+#define DIFFICULTY_BLOCKS_COUNT_V2						DIFFICULTY_WINDOW_V2
 
 #define CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS       1
 #define CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_SECONDS      DIFFICULTY_TARGET * CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS
