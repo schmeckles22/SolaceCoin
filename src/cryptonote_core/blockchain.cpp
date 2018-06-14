@@ -86,7 +86,7 @@ static const struct {
   { 1, 1, 0, 1482806500 },
   { 2, 850, 0, 1524272502 },
   { 3, 10000, 0, 1524348153 },
-  { 4, 99514, 0, 1529020773 }
+  { 4, 102047, 0, 1529193580 }
 };
 static const uint64_t mainnet_hard_fork_version_1_till = (uint64_t)-1;
 
@@ -948,7 +948,7 @@ difficulty_type Blockchain::get_next_difficulty_for_alternative_chain(const std:
   size_t target = DIFFICULTY_TARGET;
 
   // calculate the difficulty target for the block and return it
-  if (version == 1) {
+  if (version < 4) {
     return next_difficulty(timestamps, cumulative_difficulties, target);
   } else {
     return next_difficulty_v2(timestamps, cumulative_difficulties, target);
@@ -1138,18 +1138,8 @@ bool Blockchain::create_block_template(block& b, const account_public_address& m
 
   median_size = m_current_block_cumul_sz_limit / 2;
 
-  if (b.major_version < 4)
-  {
-		cal_height = height - height % COIN_EMISSION_HEIGHT_INTERVAL;
-		already_generated_coins = cal_height ? m_db->get_block_already_generated_coins(cal_height - 1) : 0;
-   }
-	 else
-	 {
-	 	cal_height = height;
-		already_generated_coins = m_db->get_block_already_generated_coins(cal_height - 1);
-	}
-
-  LOG_PRINT_L1("1124. Already generated coints " << already_generated_coins << " at height " << height);
+  cal_height = height - height % COIN_EMISSION_HEIGHT_INTERVAL;
+  already_generated_coins = cal_height ? m_db->get_block_already_generated_coins(cal_height - 1) : 0;
 
   CRITICAL_REGION_END();
 
@@ -2776,22 +2766,10 @@ bool Blockchain::check_fee(size_t blob_size, uint64_t fee)
   uint64_t fee_per_kb;
   uint64_t median = m_current_block_cumul_sz_limit / 2;
   uint64_t height = m_db->height();
-  uint64_t cal_height;
-  uint64_t cal_generated_coins;
+  uint64_t cal_height = height - height % COIN_EMISSION_HEIGHT_INTERVAL;
+  uint64_t cal_generated_coins = cal_height ? m_db->get_block_already_generated_coins(cal_height - 1) : 0;
   uint64_t base_reward;
   uint8_t version = get_current_hard_fork_version();
-  
- if (version < 4)
-	{
-		cal_height = height - height % COIN_EMISSION_HEIGHT_INTERVAL;
-		cal_generated_coins = cal_height ? m_db->get_block_already_generated_coins(cal_height - 1) : 0;
-	}
-	else
-	{
-		cal_height = height;
-		cal_generated_coins = m_db->get_block_already_generated_coins(cal_height - 1);
-	}
-  LOG_PRINT_L1("2766. Already generated coints" << cal_generated_coins << " at height " << height);
 	
   if (!get_block_reward(median, 1, cal_generated_coins, base_reward, height))
     return false;
@@ -2827,23 +2805,11 @@ uint64_t Blockchain::get_dynamic_per_kb_fee_estimate(uint64_t grace_blocks)
 
   //uint64_t already_generated_coins = m_db->height() ? m_db->get_block_already_generated_coins(m_db->height() - 1) : 0;
   uint64_t height = m_db->height();
-  uint64_t cal_height;
-  uint64_t cal_generated_coins;
+  uint64_t cal_height = height - height % COIN_EMISSION_HEIGHT_INTERVAL;
+  uint64_t cal_generated_coins = cal_height ? m_db->get_block_already_generated_coins(cal_height - 1) : 0;
   uint64_t base_reward;
   uint8_t version = get_current_hard_fork_version();
- 
- if (version < 4)
-	{
-		cal_height = height - height % COIN_EMISSION_HEIGHT_INTERVAL;
-		cal_generated_coins = cal_height ? m_db->get_block_already_generated_coins(cal_height - 1) : 0;
-	}
-	else
-	{
-		cal_height = height;
-		cal_generated_coins = m_db->get_block_already_generated_coins(cal_height - 1);
-	}
-  LOG_PRINT_L1("2817. Already generated coints" << cal_generated_coins << " at height " << height);
-  
+
   if (!get_block_reward(median, 1, cal_generated_coins, base_reward, height))
   {
     LOG_PRINT_L1("Failed to determine block reward, using placeholder " << print_money(BLOCK_REWARD_OVERESTIMATE) << " as a high bound");
@@ -3296,22 +3262,10 @@ leave:
   TIME_MEASURE_START(vmt);
   uint64_t base_reward = 0;
   uint64_t height = m_db->height();
-  uint64_t cal_height;
-  uint64_t cal_generated_coins;
+  uint64_t cal_height = height - height % COIN_EMISSION_HEIGHT_INTERVAL;
+  uint64_t cal_generated_coins = cal_height ? m_db->get_block_already_generated_coins(cal_height - 1) : 0;
   uint8_t version = get_current_hard_fork_version();
-  
- if (version < 4)
-	{
-		cal_height = height - height % COIN_EMISSION_HEIGHT_INTERVAL;
-		cal_generated_coins = cal_height ? m_db->get_block_already_generated_coins(cal_height - 1) : 0;
-	}
-	else
-	{
-		cal_height = height;
-		cal_generated_coins = m_db->get_block_already_generated_coins(cal_height - 1);
-	}
-    
-  LOG_PRINT_L1("3306. Already generated coints" << cal_generated_coins << " at height " << height);
+
   if (!validate_miner_transaction(bl, cumulative_block_size, fee_summary, base_reward, cal_generated_coins, bvc.m_partial_block_reward, m_hardfork->get_current_version()))
   {
     LOG_PRINT_L1("Block with id: " << id << " has incorrect miner transaction");
@@ -3332,10 +3286,8 @@ leave:
   // at MONEY_SUPPLY. already_generated_coins is only used to compute the block subsidy and MONEY_SUPPLY yields a
   // subsidy of 0 under the base formula and therefore the minimum subsidy >0 in the tail state.
 
-  uint64_t already_generated_coins;
-	already_generated_coins = height ? m_db->get_block_already_generated_coins(height - 1) : 0;
-	already_generated_coins = base_reward < (MONEY_SUPPLY-already_generated_coins) ? already_generated_coins + base_reward : MONEY_SUPPLY;  
-  LOG_PRINT_L1("3306. Already generated coints" << already_generated_coins << " at height " << height);
+  uint64_t already_generated_coins = height ? m_db->get_block_already_generated_coins(height - 1) : 0;
+  already_generated_coins = base_reward < (MONEY_SUPPLY-already_generated_coins) ? already_generated_coins + base_reward : MONEY_SUPPLY;
   if (height)
     cumulative_difficulty += m_db->get_block_cumulative_difficulty(height - 1);
 
@@ -3613,10 +3565,17 @@ bool Blockchain::prepare_handle_incoming_blocks(const std::list<block_complete_e
 {
   LOG_PRINT_YELLOW("Blockchain::" << __func__, LOG_LEVEL_3);
   TIME_MEASURE_START(prepare);
+  bool stop_batch;
   CRITICAL_REGION_LOCAL(m_blockchain_lock);
 
   if(blocks_entry.size() == 0)
     return false;
+
+  while (!(stop_batch = m_db->batch_start(blocks_entry.size()))) {
+    m_blockchain_lock.unlock();
+    epee::misc_utils::sleep_no_w(1000);
+    m_blockchain_lock.lock();
+  }
 
   if ((m_db->height() + blocks_entry.size()) < m_blocks_hash_check.size())
     return true;
