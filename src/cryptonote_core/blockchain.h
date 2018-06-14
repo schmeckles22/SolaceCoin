@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2018, The Monero Project
 // Copyright (c) 2018, SUMOKOIN
-// Copyright (c) 2014-2018, Solace Charity Coin Project
+// Copyright (c) 2014-2018, Saronite Project
 //
 // All rights reserved.
 //
@@ -99,6 +99,7 @@ namespace cryptonote
       size_t block_cumulative_size; //!< the size (in bytes) of the block
       difficulty_type cumulative_difficulty; //!< the accumulated difficulty after that block
       uint64_t already_generated_coins; //!< the total coins minted after that block
+ 
     };
 
     /**

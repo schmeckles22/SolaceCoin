@@ -65,7 +65,7 @@ public:
   void run()
   {
     LOG_PRINT_L0("Starting core rpc server...");
-    if (!m_server.run(2, false))
+    if (!m_server.run(4, false))
     {
       throw std::runtime_error("Failed to start core rpc server.");
     }

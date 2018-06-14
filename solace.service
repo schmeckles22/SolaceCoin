@@ -1,0 +1,13 @@
+[Unit]
+Description=Solace Daemon
+After=network.target
+
+[Service]
+Type=forking
+GuessMainPID=no
+ExecStart=/usr/bin/solaced --rpc-bind-ip 127.0.0.1 --detach --restricted-rpc
+Restart=always
+User=solaced
+
+[Install]
+WantedBy=multi-user.target

@@ -1,6 +1,6 @@
-// Copyright (c) 2014-2018, The Monero Project
-// Copyright (c) 2018, SUMOKOIN
-// Copyright (c) 2014-2018, Solace Charity Coin Project
+// Copyright (c) 2017-2018 Haven Protocol
+//
+// Copyright (c) 2014-2017, The Monero Project
 //
 // All rights reserved.
 //
@@ -35,13 +35,15 @@
 #include <cstddef>
 #include <cstdint>
 #include <vector>
+#include <boost/math/special_functions/round.hpp>
 
-#include "include_base_utils.h"
 #include "common/int-util.h"
 #include "crypto/hash.h"
 #include "cryptonote_config.h"
-#include "misc_language.h"
 #include "difficulty.h"
+
+#undef MONERO_DEFAULT_LOG_CATEGORY
+#define MONERO_DEFAULT_LOG_CATEGORY "difficulty"
 
 namespace cryptonote {
 
@@ -120,29 +122,31 @@ namespace cryptonote {
     return !carry;
   }
 
+
+
   /*
-  # Tom Harold (Degnr8) WT
-  # Modified by Zawy to be a weighted-Weighted Harmonic Mean (WWHM)
-  # No limits in rise or fall rate should be employed.
-  # MTP should not be used.
-  k = (N+1)/2  * T
+ # Tom Harold (Degnr8) WT
+ # Modified by Zawy to be a weighted-Weighted Harmonic Mean (WWHM)
+ * Further credit to thaerkh https://github.com/thaerkh who implemented this DAA into Masari and as a pull request to Monero.
+ # No limits in rise or fall rate should be employed.
+ # MTP should not be used.
+ k = (N+1)/2  * T
+ # original algorithm
+ d=0, t=0, j=0
+ for i = height - N+1 to height  # (N most recent blocks)
+     # TS = timestamp
+     solvetime = TS[i] - TS[i-1]
+     solvetime = 10*T if solvetime > 10*T
+     solvetime = -9*T if solvetime < -9*T
+     j++
+     t +=  solvetime * j
+     d +=D[i] # sum the difficulties
+ next i
+ t=T*N/2 if t < T*N/2  # in case of startup weirdness, keep t reasonable
+ next_D = d * k / t
+ */
 
-  # original algorithm
-  d=0, t=0, j=0
-  for i = height - N+1 to height  # (N most recent blocks)
-      # TS = timestamp
-      solvetime = TS[i] - TS[i-1]
-      solvetime = 10*T if solvetime > 10*T
-      solvetime = -9*T if solvetime < -9*T
-      j++
-      t +=  solvetime * j
-      d +=D[i] # sum the difficulties
-  next i
-  t=T*N/2 if t < T*N/2  # in case of startup weirdness, keep t reasonable
-  next_D = d * k / t
-  */
   difficulty_type next_difficulty(std::vector<std::uint64_t> timestamps, std::vector<difficulty_type> cumulative_difficulties, size_t target_seconds) {
-
     if (timestamps.size() > DIFFICULTY_BLOCKS_COUNT)
     {
       timestamps.resize(DIFFICULTY_BLOCKS_COUNT);
@@ -153,24 +157,25 @@ namespace cryptonote {
     assert(length == cumulative_difficulties.size());
     if (length <= 1) {
       return 1;
-		}
+    }
 
-		uint64_t weighted_timespans = 0;
-		uint64_t target;
+    uint64_t weighted_timespans = 0;
+    uint64_t target;
 
-		for (size_t i = 1; i < length; i++) {
-			uint64_t timespan;
-			if (timestamps[i - 1] >= timestamps[i]) {
-				timespan = 1;
-			} else {
-				timespan = timestamps[i] - timestamps[i - 1];
-			}
-			if (timespan > 10 * target_seconds) {
-				timespan = 10 * target_seconds;
-			}
-			weighted_timespans += i * timespan;
-		}
-		target = ((length + 1) / 2) * target_seconds;
+    for (size_t i = 1; i < length; i++) {
+      uint64_t timespan;
+      if (timestamps[i - 1] >= timestamps[i]) {
+        timespan = 1;
+      } else {
+        timespan = timestamps[i] - timestamps[i - 1];
+      }
+      if (timespan > 10 * target_seconds) {
+        timespan = 10 * target_seconds;
+      }
+      weighted_timespans += i * timespan;
+    }
+    target = ((length + 1) / 2) * target_seconds;
+
 
     uint64_t minimum_timespan = target_seconds * length / 2;
     if (weighted_timespans < minimum_timespan) {
@@ -185,13 +190,63 @@ namespace cryptonote {
     if (high != 0) {
       return 0;
     }
-
-    if (!low / weighted_timespans) {
-      return 1;
-    }
-
     return low / weighted_timespans;
   }
 
-}
+  difficulty_type next_difficulty_v2(std::vector<std::uint64_t> timestamps, std::vector<difficulty_type> cumulative_difficulties, size_t target_seconds) {
 
+		// LWMA difficulty algorithm
+		// Copyright (c) 2017-2018 Zawy
+		// MIT license http://www.opensource.org/licenses/mit-license.php.
+		// This is an improved version of Tom Harding's (Deger8) "WT-144"
+		// Karbowanec, Masari, Bitcoin Gold, and Bitcoin Cash have contributed.
+		// See https://github.com/zawy12/difficulty-algorithms/issues/3 for other algos.
+		// Do not use "if solvetime < 0 then solvetime = 1" which allows a catastrophic exploit.
+		// T= target_solvetime;
+		// N=45, 55, 70, 90, 120 for T=600, 240, 120, 90, and 60
+
+		const int64_t T = static_cast<int64_t>(target_seconds);
+		size_t N = DIFFICULTY_WINDOW_V2;
+
+		if (timestamps.size() > N) {
+			timestamps.resize(N + 1);
+			cumulative_difficulties.resize(N + 1);
+		}
+		size_t n = timestamps.size();
+		assert(n == cumulative_difficulties.size());
+		assert(n <= DIFFICULTY_WINDOW_V2);
+    // If new coin, just "give away" first 5 blocks at low difficulty
+    if ( n < 6 ) { return  1; }
+    // If height "n" is from 6 to N, then reset N to n-1.
+    else if (n < N+1) { N=n-1; }
+
+		// To get an average solvetime to within +/- ~0.1%, use an adjustment factor.
+    // adjust=0.99 for 90 < N < 130
+		const double adjust = 0.998;
+		// The divisor k normalizes LWMA.
+		const double k = N * (N + 1) / 2;
+
+		double LWMA(0), sum_inverse_D(0), harmonic_mean_D(0), nextDifficulty(0);
+		int64_t solveTime(0);
+		uint64_t difficulty(0), next_difficulty(0);
+
+		// Loop through N most recent blocks.
+		for (size_t i = 1; i <= N; i++) {
+			solveTime = static_cast<int64_t>(timestamps[i]) - static_cast<int64_t>(timestamps[i - 1]);
+			solveTime = std::min<int64_t>((T * 7), std::max<int64_t>(solveTime, (-7 * T)));
+			difficulty = cumulative_difficulties[i] - cumulative_difficulties[i - 1];
+			LWMA += (int64_t)(solveTime * i) / k;
+			sum_inverse_D += 1 / static_cast<double>(difficulty);
+		}
+
+		// Keep LWMA sane in case something unforeseen occurs.
+		if (static_cast<int64_t>(boost::math::round(LWMA)) < T / 20)
+			LWMA = static_cast<double>(T / 20);
+
+		harmonic_mean_D = N / sum_inverse_D * adjust;
+		nextDifficulty = harmonic_mean_D * T / LWMA;
+		next_difficulty = static_cast<uint64_t>(nextDifficulty);
+
+    return next_difficulty;
+  }
+}

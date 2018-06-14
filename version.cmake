@@ -6,7 +6,7 @@ endfunction ()
 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/version")
 find_package(Git QUIET)
-if ("$Format:$" STREQUAL "")
+if ("" STREQUAL "")
   # We're in a tarball; use hard-coded variables.
   write_static_version_header("release")
 elseif (GIT_FOUND OR Git_FOUND)

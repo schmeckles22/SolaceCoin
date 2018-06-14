@@ -49,7 +49,8 @@
 #define CURRENT_BLOCK_MAJOR_VERSION                     1
 #define CURRENT_BLOCK_MINOR_VERSION                     1
 #define CRYPTONOTE_V2_POW_BLOCK_VERSION                 3
-#define CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT              60*60*2
+#define BLOCK_MAJOR_VERSION_4							4
+#define CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT              DIFFICULTY_TARGET * 7
 #define CRYPTONOTE_DEFAULT_TX_SPENDABLE_AGE             10
 #define BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW               60
 
@@ -84,9 +85,11 @@
 
 #define DIFFICULTY_TARGET                               60  // seconds
 #define DIFFICULTY_WINDOW                               93  // blocks
+#define DIFFICULTY_WINDOW_V2                            45 // blocks
 #define DIFFICULTY_LAG                                  15   // !!!
 #define DIFFICULTY_CUT                                  60   // timestamps to cut after sorting
 #define DIFFICULTY_BLOCKS_COUNT                         DIFFICULTY_WINDOW
+#define DIFFICULTY_BLOCKS_COUNT_V2						DIFFICULTY_WINDOW_V2
 
 #define CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS       1
 #define CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_SECONDS      DIFFICULTY_TARGET * CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS
@@ -101,7 +104,7 @@
 #define CRYPTONOTE_MEMPOOL_TX_LIVETIME                  86400 //seconds, one day
 #define CRYPTONOTE_MEMPOOL_TX_FROM_ALT_BLOCK_LIVETIME   604800 //seconds, one week
 
-#define COMMAND_RPC_GET_BLOCKS_FAST_MAX_COUNT           1000
+#define COMMAND_RPC_GET_BLOCKS_FAST_MAX_COUNT           100
 
 #define P2P_LOCAL_WHITE_PEERLIST_LIMIT                  1000
 #define P2P_LOCAL_GRAY_PEERLIST_LIMIT                   5000
@@ -143,7 +146,6 @@
 
 #define DEFAULT_MIXIN                                   2     // default & minimum mixin allowed
 #define MAX_MIXIN                                       120
-
 
 #define TRANSACTION_SIZE_LIMIT                          ((uint64_t) ((CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE * 110 / 100) - CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE))
 #define TRANSACTION_SIZE_LIMIT_V2                       ((uint64_t) ((CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2 * 125 / 100) - CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE))
