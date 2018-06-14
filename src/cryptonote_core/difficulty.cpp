@@ -146,7 +146,8 @@ namespace cryptonote {
  next_D = d * k / t
  */
 
-  difficulty_type next_difficulty(std::vector<std::uint64_t> timestamps, std::vector<difficulty_type> cumulative_difficulties, size_t target_seconds) {
+difficulty_type next_difficulty(std::vector<std::uint64_t> timestamps, std::vector<difficulty_type> cumulative_difficulties, size_t target_seconds) {
+
     if (timestamps.size() > DIFFICULTY_BLOCKS_COUNT)
     {
       timestamps.resize(DIFFICULTY_BLOCKS_COUNT);
@@ -157,25 +158,24 @@ namespace cryptonote {
     assert(length == cumulative_difficulties.size());
     if (length <= 1) {
       return 1;
-    }
+		}
 
-    uint64_t weighted_timespans = 0;
-    uint64_t target;
+		uint64_t weighted_timespans = 0;
+		uint64_t target;
 
-    for (size_t i = 1; i < length; i++) {
-      uint64_t timespan;
-      if (timestamps[i - 1] >= timestamps[i]) {
-        timespan = 1;
-      } else {
-        timespan = timestamps[i] - timestamps[i - 1];
-      }
-      if (timespan > 10 * target_seconds) {
-        timespan = 10 * target_seconds;
-      }
-      weighted_timespans += i * timespan;
-    }
-    target = ((length + 1) / 2) * target_seconds;
-
+		for (size_t i = 1; i < length; i++) {
+			uint64_t timespan;
+			if (timestamps[i - 1] >= timestamps[i]) {
+				timespan = 1;
+			} else {
+				timespan = timestamps[i] - timestamps[i - 1];
+			}
+			if (timespan > 10 * target_seconds) {
+				timespan = 10 * target_seconds;
+			}
+			weighted_timespans += i * timespan;
+		}
+		target = ((length + 1) / 2) * target_seconds;
 
     uint64_t minimum_timespan = target_seconds * length / 2;
     if (weighted_timespans < minimum_timespan) {
@@ -190,6 +190,11 @@ namespace cryptonote {
     if (high != 0) {
       return 0;
     }
+
+    if (!low / weighted_timespans) {
+      return 1;
+    }
+
     return low / weighted_timespans;
   }
 
