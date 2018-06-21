@@ -2969,7 +2969,7 @@ bool Blockchain::check_block_timestamp(const block& b) const
     return false;
   }
 
-  +  uint64_t median_ts;
+   uint64_t median_ts;
   return check_median_block_timestamp(b, median_ts);
 }
 //------------------------------------------------------------------
