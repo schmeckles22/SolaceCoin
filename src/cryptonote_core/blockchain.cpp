@@ -2956,10 +2956,10 @@ bool Blockchain::check_block_timestamp(const block& b) const
   LOG_PRINT_L3("Blockchain::" << __func__);
   uint64_t cryptonote_block_future_time_limit;
   uint8_t hf_version = get_current_hard_fork_version();
-  if (hf_version < 2) {
+  if (hf_version < 4) {
     cryptonote_block_future_time_limit = CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT;
   }
-  else if (hf_version < 4) {
+  else  {
     cryptonote_block_future_time_limit = CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V2;
   }
   
