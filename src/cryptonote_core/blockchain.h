@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2018, The Monero Project
 // Copyright (c) 2018, SUMOKOIN
-// Copyright (c) 2014-2018, Saronite Project
+// Copyright (c) 2014-2018, Solace Charity Coin Project
 //
 // All rights reserved.
 //
@@ -99,7 +99,6 @@ namespace cryptonote
       size_t block_cumulative_size; //!< the size (in bytes) of the block
       difficulty_type cumulative_difficulty; //!< the accumulated difficulty after that block
       uint64_t already_generated_coins; //!< the total coins minted after that block
- 
     };
 
     /**
@@ -1203,6 +1202,16 @@ namespace cryptonote
      * @return true if the block's timestamp is valid, otherwise false
      */
     bool check_block_timestamp(std::vector<uint64_t>& timestamps, const block& b) const;
+
+    /**
+    * @brief wrapper for check_block_timestamp(const block& b)
+    */
+    bool check_block_timestamp(std::vector<uint64_t>& timestamps, const block& b, uint64_t& median_ts) const;
+
+    /**
+    * @brief checks and returns median block timestamp as defined by protocol
+    */
+    bool check_median_block_timestamp(const block& b, uint64_t& median_ts) const;
 
     /**
      * @brief get the "adjusted time"
