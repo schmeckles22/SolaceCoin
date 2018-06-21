@@ -222,7 +222,7 @@ namespace cryptonote {
   difficulty_type next_difficulty_v2(std::vector<std::uint64_t> timestamps, std::vector<difficulty_type> cumulative_difficulties, size_t target_seconds) {
 
     const int64_t T = static_cast<int64_t>(target_seconds);
-    size_t N = DIFFICULTY_WINDOW_V3;
+    size_t N = DIFFICULTY_WINDOW_V2;
     int64_t FTL = static_cast<int64_t>(CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V2);
 
     // Return a difficulty of 1 for first 3 blocks if it's the start of the chain.
