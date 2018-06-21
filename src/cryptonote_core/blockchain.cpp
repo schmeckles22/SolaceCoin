@@ -86,7 +86,7 @@ static const struct {
   { 1, 1, 0, 1482806500 },
   { 2, 850, 0, 1524272502 },
   { 3, 10000, 0, 1524348153 },
-  { 4, 150000, 0, 1530045200 }
+  { 4, 115000, 0, 1530045200 }
 };
 static const uint64_t mainnet_hard_fork_version_1_till = (uint64_t)-1;
 
