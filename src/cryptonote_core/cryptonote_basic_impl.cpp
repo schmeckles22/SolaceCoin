@@ -76,19 +76,34 @@ namespace cryptonote {
     return CRYPTONOTE_MAX_TX_SIZE;
   }
   //-----------------------------------------------------------------------------------------------
-  bool get_block_reward(size_t median_size, size_t current_block_size, uint64_t already_generated_coins, uint64_t &reward, uint64_t height) {
+  bool get_block_reward(size_t median_size, size_t current_block_size, uint64_t already_generated_coins, uint64_t &reward, uint64_t height, uint8_t version) {
     
     uint64_t base_reward;
     uint64_t round_factor = 10000000; // 1 * pow(10, 7)
     if (height > 0)
     {
-      if (height < (PEAK_COIN_EMISSION_HEIGHT + COIN_EMISSION_HEIGHT_INTERVAL)) {
-        uint64_t interval_num = height / COIN_EMISSION_HEIGHT_INTERVAL;
-        double money_supply_pct = 0.1888 + interval_num*(0.023 + interval_num*0.0032);
-        base_reward = ((uint64_t)(MONEY_SUPPLY * money_supply_pct)) >> EMISSION_SPEED_FACTOR;
+      if(version < 5) {
+        if (height < (PEAK_COIN_EMISSION_HEIGHT + COIN_EMISSION_HEIGHT_INTERVAL)) {
+          uint64_t interval_num = height / COIN_EMISSION_HEIGHT_INTERVAL;
+          double money_supply_pct = 0.1888 + interval_num*(0.023 + interval_num*0.0032);
+          base_reward = ((uint64_t)(MONEY_SUPPLY * money_supply_pct)) >> EMISSION_SPEED_FACTOR;
+        }
+        else{
+          base_reward = (MONEY_SUPPLY - already_generated_coins) >> EMISSION_SPEED_FACTOR;
+        }
       }
-      else{
-        base_reward = (MONEY_SUPPLY - already_generated_coins) >> EMISSION_SPEED_FACTOR;
+      else
+     {
+      base_reward = MONEY_SUPPLY >> EMISSION_SPEED_FACTOR; 
+
+		  base_reward = base_reward / BLOCK_CORRECTION; // force block to 16.2
+		
+      base_reward = base_reward - (height * 2890); // Make block reward have a "linear" decrease
+        if (base_reward < FINAL_SUBSIDY)
+	
+        {
+          base_reward = FINAL_SUBSIDY;
+        }
       }
     }
     else
@@ -104,9 +119,14 @@ namespace cryptonote {
         base_reward = FINAL_SUBSIDY/2;
       }
     }
-    
-    // rounding (floor) base reward
-    base_reward = base_reward / round_factor * round_factor;
+
+    if(version < 5) {
+  base_reward = base_reward / round_factor * round_factor;
+  }
+  else
+  {
+  base_reward = base_reward;
+  }
 
     //make it soft
     if (median_size < CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2) {
@@ -143,6 +163,7 @@ namespace cryptonote {
     reward = reward_lo;
     return true;
   }
+  
   //------------------------------------------------------------------------------------
   uint8_t get_account_address_checksum(const public_address_outer_blob& bl)
   {

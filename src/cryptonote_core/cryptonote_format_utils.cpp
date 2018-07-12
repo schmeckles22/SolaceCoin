@@ -111,16 +111,28 @@ namespace cryptonote
   }
   //---------------------------------------------------------------
   // following formula: f(x) = 0.06 * (1 - sqrt(x)) where x = current_supply / max_supply S.T. current_supply <= max_supply
-  float get_project_block_reward_fee(float already_generated_coins) {
-    float current_dev_fee;
-    if (already_generated_coins <= MONEY_SUPPLY) {
-      current_dev_fee =  CRYPTONOTE_PROJECT_INITIAL_MULTIPLIER * (1 - std::sqrt((float)already_generated_coins / (float)MONEY_SUPPLY));
-      current_dev_fee = std::round(current_dev_fee * 100000) / 100000; // 32bit float rounded to 5 decimal places for consistency (this ensures functional determinism)
-    } else {
-      current_dev_fee = 0; // dev fee is reduced to 0 once tail emission kicks in
-    }
-    return current_dev_fee;
-  }
+float get_project_block_reward_fee(float already_generated_coins, uint8_t hard_fork_version) {
+float current_dev_fee;
+ 
+if (hard_fork_version < 5)
+{
+if (already_generated_coins <= MONEY_SUPPLY) 
+{
+current_dev_fee = CRYPTONOTE_PROJECT_INITIAL_MULTIPLIER * (1 - std::sqrt((float)already_generated_coins / (float)MONEY_SUPPLY));
+current_dev_fee = std::round(current_dev_fee * 100000) / 100000; // 32bit float rounded to 5 decimal places for consistency (this ensures functional determinism)
+} 
+else 
+{
+current_dev_fee = 0; // dev fee is reduced to 0 once tail emission kicks in
+}
+
+}
+else 
+{
+current_dev_fee = CRYPTONOTE_PROJECT_INITIAL_MULTIPLIER * (1 - 0 / (float)MONEY_SUPPLY);
+}
+return current_dev_fee;
+}
 
   //---------------------------------------------------------------
   bool construct_miner_tx(size_t height, size_t median_size, uint64_t already_generated_coins, size_t current_block_size, uint64_t fee, const account_public_address &miner_address, transaction& tx, const blobdata& extra_nonce, size_t max_outs, uint8_t hard_fork_version) {
@@ -143,7 +155,7 @@ namespace cryptonote
     uint64_t block_reward;
     uint64_t dev_block_reward;
     uint64_t miner_block_reward;
-    if (!get_block_reward(median_size, current_block_size, already_generated_coins, block_reward, height))
+    if (!get_block_reward(median_size, current_block_size, already_generated_coins, block_reward, height, hard_fork_version))
     {
       LOG_PRINT_L0("Block is too big");
       return false;
@@ -154,7 +166,7 @@ namespace cryptonote
       ", fee " << fee);
 #endif
 
-    float current_dev_fee = get_project_block_reward_fee(already_generated_coins);
+    float current_dev_fee = get_project_block_reward_fee(already_generated_coins, hard_fork_version);
 
     dev_block_reward = current_dev_fee * block_reward;
     miner_block_reward = (block_reward + fee) - dev_block_reward;

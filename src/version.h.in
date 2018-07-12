@@ -1,4 +1,4 @@
 #define OMBRE_VERSION_TAG "@VERSIONTAG@"
-#define OMBRE_VERSION "0.2.1.0"
-#define OMBRE_RELEASE_NAME "Hanging Gardens of Babylon"
+#define OMBRE_VERSION "0.3.1.0"
+#define OMBRE_RELEASE_NAME "Mausoleum at Halicarnassus"
 #define OMBRE_VERSION_FULL OMBRE_VERSION "-" OMBRE_VERSION_TAG
