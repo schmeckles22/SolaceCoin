@@ -143,7 +143,7 @@ namespace cryptonote
     uint64_t block_reward;
     uint64_t dev_block_reward;
     uint64_t miner_block_reward;
-    if (!get_block_reward(median_size, current_block_size, already_generated_coins, block_reward, height))
+    if (!get_block_reward(median_size, current_block_size, already_generated_coins, block_reward, height, hard_fork_version))
     {
       LOG_PRINT_L0("Block is too big");
       return false;

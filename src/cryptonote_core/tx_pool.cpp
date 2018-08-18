@@ -604,7 +604,7 @@ namespace cryptonote
   }
   //---------------------------------------------------------------------------------
   //TODO: investigate whether boolean return is appropriate
-  bool tx_memory_pool::fill_block_template(block &bl, size_t median_size, uint64_t already_generated_coins, size_t &total_size, uint64_t &fee, uint64_t height)
+  bool tx_memory_pool::fill_block_template(block &bl, size_t median_size, uint64_t already_generated_coins, size_t &total_size, uint64_t &fee, uint64_t height, uint8_t version)
   {
     CRITICAL_REGION_LOCAL(m_transactions_lock);
 
@@ -613,7 +613,7 @@ namespace cryptonote
     fee = 0;
 
     //baseline empty block
-    get_block_reward(median_size, total_size, already_generated_coins, best_coinbase, height);
+    get_block_reward(median_size, total_size, already_generated_coins, best_coinbase, height, version);
 
     size_t max_total_size = (200 * median_size) / 100 - CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE;
     std::unordered_set<crypto::key_image> k_images;
@@ -636,7 +636,7 @@ namespace cryptonote
       // If we're getting lower coinbase tx,
       // stop including more tx
       uint64_t block_reward;
-      if (!get_block_reward(median_size, total_size + tx_it->second.blob_size + CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE, already_generated_coins, block_reward, height))
+            if (!get_block_reward(median_size, total_size + tx_it->second.blob_size + CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE, already_generated_coins, block_reward, height, version))
       {
         LOG_PRINT_L2("  would exceed maximum block size");
         sorted_it++;

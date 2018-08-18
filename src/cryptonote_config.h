@@ -60,6 +60,7 @@
 
 // MONEY_SUPPLY - total number coins to be generated
 #define MONEY_SUPPLY                                    ((uint64_t)210000000000000000) // 21 Billion.
+#define MONEY_SUPPLY_V5                                 ((uint64_t)105000000000000000) // 10.5 Billion.
 #define EMISSION_SPEED_FACTOR                           20
 #define FINAL_SUBSIDY                                   ((uint64_t)10000000) // 1 * pow(8, 7)
 #define GENESIS_BLOCK_REWARD                            ((uint64_t)10000000)
